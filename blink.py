@@ -10,5 +10,7 @@ while True:
         sleep(1) # sleep 1sec
     except KeyboardInterrupt:
         break
+
 pin.off()
+
 print("Finished.")

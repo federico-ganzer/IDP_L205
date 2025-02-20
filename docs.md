@@ -1,5 +1,5 @@
 
-# Photovoltaic Fault Classification Project
+# Team L205 IDP
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)  
 ![Version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)
@@ -11,21 +11,19 @@
 
 ## Introduction
 
-
-
 ## Modules
 
 ### Pathfinder
 
-**File:** `pathfinder.py`  
-**Description:**   
+**File:** `pathfinder.py`
+
+**Description:**
+
 **Functions:**
--
 
 ### Sensors
-
 **File:** `sensors.py`  
-**Description:** Contains CNN models.  
+**Description:**  
 **Classes:**
 
 ### other
@@ -60,10 +58,5 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
-
-## Contact
-
-- **Email:**  |  | fg442@cam.ac.uk
-
 
 ---

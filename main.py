@@ -29,6 +29,7 @@ class Robot:
         self.junction_count = 0
         self.current_route = []
         self.current_position = (0, 0)
+        self.current_node = 'START'
         self.current_direction = 'N'
         self.current_target = None
         self.block = False
@@ -37,19 +38,19 @@ class Robot:
         #sensors
         self.tcs = TCS34725(i2c_bus)
 
-    def turn(self, direction):
+    def turn(self, new_direction):
         '''
         Turn the robot in the specified direction
         '''
-        if utils.valid_turn(direction):
+        if utils.valid_turn(new_direction):
         
-            if direction == 'N':
+            if new_direction == 'N':
                 pass
-            elif direction == 'E':
+            elif new_direction == 'E':
                 pass
-            elif direction == 'S':
+            elif new_direction == 'S':
                 pass
-            elif direction == 'W':
+            elif new_direction == 'W':
                 pass
     
     def backout(self):

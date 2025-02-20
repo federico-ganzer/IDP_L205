@@ -1,4 +1,4 @@
-#  Intercollege Destructive Programme - L205
+#  It Doesn’t Perform - L205
 
 ## Team Leads:
 - Electrical: Alex

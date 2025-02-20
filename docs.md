@@ -14,14 +14,12 @@
 ## Modules
 
 ### Pathfinder
-
 **File:** `pathfinder.py`  
-**Description:**   
+**Description:**
 **Functions:**
 -
 
 ### Sensors
-
 **File:** `sensors.py`  
 **Description:** Contains CNN models.  
 **Classes:**

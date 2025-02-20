@@ -27,7 +27,7 @@
 **File:** `preprocessing.py`  
 **Description:** Contains preprocessing functions used in `datafetcher.py`.  
 **Functions:**
-
+-
 
 ### Sensors
 
@@ -70,7 +70,7 @@ SOFTWARE.
 
 ## Contact
 
-- **Email:** federico.ganzer@enlitia.com | federico.ganzer@outlook.com | fg442@cam.ac.uk
-- **GitHub:** [federico-ganzer](https://github.com/federico-ganzer)
+- **Email:**  |  | fg442@cam.ac.uk
+
 
 ---

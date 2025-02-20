@@ -21,12 +21,6 @@
 **Description:**   
 **Functions:**
 
-### Preprocessing
-
-**File:** `preprocessing.py`  
-**Description:** Contains preprocessing functions used in `datafetcher.py`.  
-**Functions:**
-
 
 ### Sensors
 

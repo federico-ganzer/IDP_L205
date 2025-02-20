@@ -20,7 +20,6 @@
 **File:** `pathfinder.py`  
 **Description:**   
 **Functions:**
-- 
 
 ### Preprocessing
 

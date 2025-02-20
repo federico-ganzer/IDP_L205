@@ -21,7 +21,7 @@
 
 ### Sensors
 **File:** `sensors.py`  
-**Description:** Contains CNN models.  
+**Description:**  
 **Classes:**
 
 ### other

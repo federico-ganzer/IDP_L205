@@ -13,11 +13,13 @@
 
 ## Modules
 
-## Pathfinder
-**File:** `pathfinder.py`  
+### Pathfinder
+
+**File:** `pathfinder.py`
+
 **Description:**
+
 **Functions:**
--
 
 ### Sensors
 **File:** `sensors.py`  

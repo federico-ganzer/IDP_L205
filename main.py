@@ -20,10 +20,6 @@ wheel_distance = 0
 # I2c bus
 i2c_bus = I2C(0, sda=Pin(16), scl=Pin(17))
 
-junction_coords = [(0, 1), (-1, 1), (-2, 1), (2, 1), (3, -2),
-                   (3, 0), (3, 1), (3, 2), (4, 0), (5, 0)]
-
-
 class Robot:
     def __init__(self):
         self.junction_count = 0

@@ -71,7 +71,13 @@ def dijkstra(adj_list, start, end):
     return None
 
 #test
-#print(dijkstra(graph, 'C', 'DP1'))
+print(dijkstra(graph, 'C', 'DP1'))
+
+# junction_id : (coordinate)
+
+
+
+junction_to_coords = {i: junction_coords[i] for i in graph.keys()}
 
 def find_route(start, end):
     

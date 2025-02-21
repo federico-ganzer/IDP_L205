@@ -17,9 +17,10 @@
 
 **File:** `pathfinder.py`
 
-**Description:**
+**Description:** Makes use of adjacency table of graph and Dijkstra's algorithm to find the minimal distance path from a given `start` node to `end` node.
 
 **Functions:**
+- `dijkstra(adj_list, start, end)`: Applies dijkstra's algorithm between `start` and `end` nodes when prodived with `adj_list` of the underlying graph (map)
 
 ### Sensors
 **File:** `sensors.py`  

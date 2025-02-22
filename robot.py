@@ -22,11 +22,27 @@ class Robot():
         #GPIO Connections
         self.led = Pin(pins[0], Pin.OUT)
         self.button = Pin(pins[1], Pin.IN, Pin.PULL_DOWN)
+        
+        #Motors 
+        #TODO: Check if pins are correct before running
+        self.motorR = Motor(pins[2], pins[3]) # Right Motor
+        self.motorL = Motor(pins[4], pins[5]) # Left Motor
 
+    def detect_junction(self):
+        '''
+        Detect junctions using outside line sensors
+        '''
+        pass
+    
     def forward(self, speed):
         '''
-        Move the robot forward
+        Move the robot forward (CURRENTLY MOTOR TEST CODE)
+        TODO: Implement line following algorithm
         '''
+        while not self.detect_junction():
+            self.motorR.forward(speed)
+            self.motorL.forward(speed)
+        
     
     def turn(self, new_direction):
         '''

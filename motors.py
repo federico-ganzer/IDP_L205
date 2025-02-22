@@ -31,3 +31,4 @@ class Servo():
 
     def stop(self):
         self.pwm.duty_u16(0)
+        

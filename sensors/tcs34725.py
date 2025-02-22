@@ -127,7 +127,8 @@ class TCS34725:
         if cycles is None and min_value is None and max_value is None:
             min_value = self._register16(_REGISTER_AILT)
             max_value = self._register16(_REGISTER_AILT)
-            if self._register8(_REGISTER_ENABLE) & _ENABLE_AIEN:
+            enable_reg = self._register8(_REGISTER_ENABLE)
+            if enable_reg is not None and enable_reg & _ENABLE_AIEN:
                 cycles = _CYCLES[self._register8(_REGISTER_APERS) & 0x0f]
             else:
                 cycles = -1

@@ -22,7 +22,8 @@ class Robot():
         #GPIO Connections
         self.led = Pin(pins[0], Pin.OUT)
         self.button = Pin(pins[1], Pin.IN, Pin.PULL_DOWN)
-        
+        self.line_sensorL = Pin(pins[6], Pin.IN, Pin.PULL_DOWN) # Left Line Sensor
+        self.line_sensorR = Pin(pins[7], Pin.IN, Pin.PULL_DOWN) # Right Line Sensor
         #Motors 
         #TODO: Check if pins are correct before running
         self.motorR = Motor(pins[2], pins[3]) # Right Motor
@@ -40,8 +41,10 @@ class Robot():
         TODO: Implement line following algorithm
         '''
         while not self.detect_junction():
+            
             self.motorR.forward(speed)
             self.motorL.forward(speed)
+            
         
     
     def turn(self, new_direction):
@@ -65,8 +68,11 @@ class Robot():
             1. Use ultrasonic sensor to check if block is in front of robot
             '''
             
-            cct, y = self.tcs.read('rgb')
-            target =  'DP1' if cct < 5000 else 'DP2'
+            cct, y = self.tcs.read()
+            if cct is not None:
+                target =  'DP1' if cct < 5000 else 'DP2'
+            else:
+                raise ValueError('Colour not detected')
             
             #update state
             self.current_target = target

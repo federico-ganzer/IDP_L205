@@ -16,13 +16,14 @@
 ### Robot
 
 **File:** `robot.py`
+
 **Description:** Contains `Robot()` class. Robot contains methods for AGV control for manouvring and collecting/depositing loads. Class is initialised with pin numbers associated with the servos, motors and sensors and can be easily modified as a modular system (eg. if sensor or servo additions are made). 
 
 ### Pathfinder
 
 **File:** `pathfinder.py`
-**Description:** Makes use of adjacency table of graph and Dijkstra's algorithm to find the minimal distance path from a given `start` node to `end` node. Includes a map from each node to their coordinate in physical space, which is used to determine whic direction turns need to be made in.
 
+**Description:** Makes use of adjacency table of graph and Dijkstra's algorithm to find the minimal distance path from a given `start` node to `end` node. Includes a map from each node to their coordinate in physical space, which is used to determine whic direction turns need to be made in.
 **Functions:**
 - `dijkstra(adj_list, start, end)`: Applies dijkstra's algorithm between `start` and `end` nodes when prodived with `adj_list` of the underlying graph (map)
 
@@ -31,7 +32,6 @@
 **Description:**  Includes classes and methods responsible for sensor reading
 
 ### other
-**modules:**
 - `utils.py`: Contains utility helper functions to check for validity of manouvres.
 
 

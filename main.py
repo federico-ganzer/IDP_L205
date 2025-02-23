@@ -1,4 +1,4 @@
-import time
+from time import sleep
 from machine import I2C, Pin
 from sensors.tcs34725 import TCS34725
 import utils
@@ -7,13 +7,23 @@ from motors import Motor, Servo
 from robot import Robot
 
 # I2c bus
-i2c_bus = I2C(0, sda=Pin(16), scl=Pin(17))
-pins = []
+#i2c_bus = I2C(0, sda=Pin(16), scl=Pin(17))
+#pins = []
 # Robot class
-agv = Robot(i2c_bus, pins)
+# agv = Robot(i2c_bus, pins)
 
+'''
+Place holder for testing:
+TODO: Replace button press with line sensor
+'''
 
-    
+led = Pin(14, Pin.OUT)
+button = Pin(12, Pin.IN, Pin.PULL_DOWN)
+
+while True:
+  led.value(button.value())
+  sleep(0.1)
+  print(button.value())
     
 
 '''

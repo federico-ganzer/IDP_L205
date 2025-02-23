@@ -66,6 +66,9 @@ class Robot():
             '''
             Pick up the block and read colour:
             1. Use ultrasonic sensor to check if block is in front of robot
+            2. Check alignment
+            3. forward 
+            4. activate lift (include in main as opposed to here?)
             '''
             
             cct, y = self.tcs.read()
@@ -79,6 +82,7 @@ class Robot():
             self.current_route = find_route(self.current_node, target)
             self.block = True
             self.visited_customers.add(self.current_node)
+            
             return target
     
     def drop(self):

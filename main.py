@@ -7,10 +7,23 @@ from motors import Motor, Servo
 from robot import Robot
 
 # I2c bus
-#i2c_bus = I2C(0, sda=Pin(16), scl=Pin(17))
-#pins = []
+i2c_bus = I2C(0, sda=Pin(16), scl=Pin(17))
+
+button_pin = 12
+led_pin = 14
+line_sensorL_pin = 6
+line_sensorR_pin = 7
+motorR_pwm_pin = 4
+motorR_dir_pin = 5
+motorL_pwm_pin = 6
+motorL_dir_pin = 7
+
+pins = [button_pin, led_pin, line_sensorL_pin,
+        line_sensorR_pin, motorR_pwm_pin, motorR_dir_pin,
+        motorL_pwm_pin, motorL_dir_pin]
+
 # Robot class
-# agv = Robot(i2c_bus, pins)
+agv = Robot(i2c_bus, pins)
 
 '''
 Place holder for testing:

@@ -23,7 +23,8 @@
 
 **File:** `pathfinder.py`
 
-**Description:** Makes use of adjacency table of graph and Dijkstra's algorithm to find the minimal distance path from a given `start` node to `end` node. Includes a map from each node to their coordinate in physical space, which is used to determine whic direction turns need to be made in.
+**Description:** Makes use of adjacency table of graph and Dijkstra's algorithm to find the minimal distance path from a given `start` node to `end` node. Includes a map from each node to their coordinate in physical space, which is used to determine which direction turns need to be made in.
+
 **Functions:**
 - `dijkstra(adj_list, start, end)`: Applies dijkstra's algorithm between `start` and `end` nodes when prodived with `adj_list` of the underlying graph (map)
 

@@ -20,14 +20,15 @@ class Robot():
         self.tcs = TCS34725(i2c_bus) # Colour Sensor
         
         #GPIO Connections
-        self.led = Pin(pins[0], Pin.OUT)
-        self.button = Pin(pins[1], Pin.IN, Pin.PULL_DOWN)
-        self.line_sensorL = Pin(pins[6], Pin.IN, Pin.PULL_DOWN) # Left Line Sensor
-        self.line_sensorR = Pin(pins[7], Pin.IN, Pin.PULL_DOWN) # Right Line Sensor
+        self.button = Pin(pins[0], Pin.IN, Pin.PULL_DOWN)
+        self.led = Pin(pins[1], Pin.OUT)
+        self.line_sensorL = Pin(pins[2], Pin.IN, Pin.PULL_DOWN) # Left Line Sensor
+        self.line_sensorR = Pin(pins[3], Pin.IN, Pin.PULL_DOWN) # Right Line Sensor
+        
         #Motors 
         #TODO: Check if pins are correct before running
-        self.motorR = Motor(pins[2], pins[3]) # Right Motor
-        self.motorL = Motor(pins[4], pins[5]) # Left Motor
+        self.motorR = Motor(pins[4], pins[5]) # Right Motor
+        self.motorL = Motor(pins[6], pins[7]) # Left Motor
 
     def detect_junction(self):
         '''
@@ -67,8 +68,9 @@ class Robot():
             Pick up the block and read colour:
             1. Use ultrasonic sensor to check if block is in front of robot
             2. Check alignment
-            3. forward 
-            4. activate lift (include in main as opposed to here?)
+            4. Turn on colour sensor
+            5. forward (include in main as opposed to here?)
+            6. activate lift
             '''
             
             cct, y = self.tcs.read()

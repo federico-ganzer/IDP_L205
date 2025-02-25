@@ -1,12 +1,15 @@
 from machine import Pin
+from time import sleep
 from sensors.tcs34725 import TCS34725
 import utils
 from pathfinder import find_route
 from motors import Motor, Servo
 
+
+
 class Robot():
     
-    def __init__(self, i2c_bus, pins):
+    def __init__(self, i2c_bus, pins, phys_params):
         
         self.light = False # Boolean for light flashing
         self.current_route = []
@@ -15,6 +18,11 @@ class Robot():
         self.current_destination = None
         self.block = False
         self.visited_customers = set()
+        
+        self.turning_time = phys_params['turning_time']
+        self.axel_width = phys_params['axel_width']
+        self.sensor_to_axel = phys_params['sensor_to_axel']
+        
         
         #I2C Sensors
         self.tcs = TCS34725(i2c_bus) # Colour Sensor
@@ -55,12 +63,18 @@ class Robot():
         Turn the robot in the specified direction
         '''
         if utils.valid_turn(new_direction): # remember to check if turn is valid
-                return
+            self.motorR.forward(100)
+            self.motorL.reverse(100)
+            sleep(self.turning_time/2)
+            
     
-    def backout(self):
+    def spin(self):
         '''
         Backout the robot
         '''
+        self.motorR.forward(100)
+        self.motorL.reverse(100)
+        sleep(self.turning_time)
         pass
     
     def pickup(self):
@@ -95,7 +109,7 @@ class Robot():
         '''
         if self.current_node in set(['DP1', 'DP2']) and self.block:
             self.block = False
-            self.backout()
+            self.spin()
             pass
     
         

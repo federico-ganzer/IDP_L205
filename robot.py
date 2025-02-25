@@ -23,6 +23,8 @@ class Robot():
         self.axel_width = phys_params['axel_width']
         self.sensor_to_axel = phys_params['sensor_to_axel']
         
+        #line following params
+        
         
         #I2C Sensors
         self.tcs = TCS34725(i2c_bus) # Colour Sensor
@@ -56,7 +58,17 @@ class Robot():
             self.motorR.forward(speed)
             self.motorL.forward(speed)
             
+    def follow_line(self):
+        '''
+        Follow the line using line sensors
+        1. Create moving average of prev 5 readings for each sensor
+        2. Use PID to adjust motor speeds
+        '''
         
+        
+        
+        
+                  
     
     def turn(self, new_direction):
         '''

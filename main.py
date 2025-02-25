@@ -26,7 +26,7 @@ pins = [button_pin, led_pin, line_sensorL_pin,
         motorL_pwm_pin, motorL_dir_pin, servo_pin1, servo_pin2]
 
 # Robot class
-agv = Robot(i2c_bus, pins)
+agv = Robot(i2c_bus, pins, phys_params={'turning_time': 1})
 
 while True:
     if agv.button.value() == 0:

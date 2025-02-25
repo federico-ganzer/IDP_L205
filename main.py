@@ -17,26 +17,33 @@ motorR_pwm_pin = 4
 motorR_dir_pin = 5
 motorL_pwm_pin = 6
 motorL_dir_pin = 7
+servo_pin1 = 13
+servo_pin2 = 15
+
 
 pins = [button_pin, led_pin, line_sensorL_pin,
         line_sensorR_pin, motorR_pwm_pin, motorR_dir_pin,
-        motorL_pwm_pin, motorL_dir_pin]
+        motorL_pwm_pin, motorL_dir_pin, servo_pin1, servo_pin2]
 
 # Robot class
 agv = Robot(i2c_bus, pins)
+
+while True:
+    if agv.button.value() == 0:
+        agv.forward(100)
 
 '''
 Place holder for testing:
 TODO: Replace button press with line sensor
 '''
 
-led = Pin(14, Pin.OUT)
-button = Pin(12, Pin.IN, Pin.PULL_DOWN)
-
-while True:
-  led.value(button.value())
-  sleep(0.1)
-  print(button.value())
+#led = Pin(14, Pin.OUT)
+#button = Pin(12, Pin.IN, Pin.PULL_DOWN)
+#
+#while True:
+#  led.value(button.value())
+#  sleep(0.1)
+#  print(button.value())
     
 
 '''

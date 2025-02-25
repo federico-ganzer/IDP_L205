@@ -4,13 +4,15 @@ from sensors.tcs34725 import TCS34725
 import utils
 from pathfinder import find_route
 from motors import Motor, Servo
-
+from collections import deque
 
 
 class Robot():
     
     def __init__(self, i2c_bus, pins, phys_params):
         
+        
+        # State Variables
         self.light = False # Boolean for light flashing
         self.current_route = []
         self.current_node = 'START'
@@ -19,12 +21,22 @@ class Robot():
         self.block = False
         self.visited_customers = set()
         
+        
+        #physical parameters
         self.turning_time = phys_params['turning_time']
         self.axel_width = phys_params['axel_width']
         self.sensor_to_axel = phys_params['sensor_to_axel']
         
         #line following params
         
+        self._window_size = 5
+        self.left_sensor_hist = deque([0]*self._window_size, maxlen=self._window_size)
+        self.right_sensor_hist = deque([0]*self._window_size, maxlen=self._window_size)
+        self._prev_err = 0
+        self._integral = 0
+        self.kp = 1
+        self.ki = 0
+        self.kd = 0
         
         #I2C Sensors
         self.tcs = TCS34725(i2c_bus) # Colour Sensor
@@ -34,6 +46,9 @@ class Robot():
         self.led = Pin(pins[1], Pin.OUT)
         self.line_sensorL = Pin(pins[2], Pin.IN, Pin.PULL_DOWN) # Left Line Sensor
         self.line_sensorR = Pin(pins[3], Pin.IN, Pin.PULL_DOWN) # Right Line Sensor
+        self.outer_sensorL = Pin(pins[10], Pin.IN, Pin.PULL_DOWN) # Left Outer Sensor
+        self.outer_sensorR = Pin(pins[11], Pin.IN, Pin.PULL_DOWN)
+        
         
         #Motors 
         #TODO: Check if pins are correct before running
@@ -46,30 +61,63 @@ class Robot():
         '''
         Detect junctions using outside line sensors
         '''
-        pass
+        if self.outer_sensorL.value() and self.outer_sensorR.value():
+            return 'T'
+        elif self.outer_sensorL.value():
+            return 'L'
+        elif self.outer_sensorR.value():
+            return 'R'
+        else:
+            return False
     
-    def forward(self, speed):
+    
+    def forward(self, speed, line_follow=False):
         '''
         Move the robot forward (CURRENTLY MOTOR TEST CODE)
         TODO: Implement line following algorithm
         '''
-        while not self.detect_junction():
-            
-            self.motorR.forward(speed)
-            self.motorL.forward(speed)
-            
+        while True:
+            Junction = self.detect_junction()
+            if Junction:
+                self.motorR.stop()
+                self.motorL.stop()
+                return Junction
+            if line_follow:
+                self.follow_line()
+            else:
+                self.motorR.forward(speed)
+                self.motorL.forward(speed)
+    
+    
+    def _get_moving_avg(self, sensor_hist):
+        return sum(sensor_hist)/len(sensor_hist)
+    
     def follow_line(self):
         '''
         Follow the line using line sensors
         1. Create moving average of prev 5 readings for each sensor
         2. Use PID to adjust motor speeds
         '''
+        left_sensor = self.line_sensorL.value()
+        right_sensor = self.line_sensorR.value()
+        
+        self.left_sensor_hist.append(left_sensor)
+        self.right_sensor_hist.append(right_sensor)
+        
+        left_avg = self._get_moving_avg(self.left_sensor_hist)
+        right_avg = self._get_moving_avg(self.right_sensor_hist)
+        
+        err = left_avg - right_avg
+        diff = err - self._prev_err
+        self._integral += err
+        self._prev_err = err
+        
+        correction = self.kp*err + self.ki*self._integral + self.kd*diff
+        
+        self.motorR.forward(100 + correction)
+        self.motorL.forward(100 - correction)
         
         
-        
-        
-                  
-    
     def turn(self, new_direction):
         '''
         Turn the robot in the specified direction

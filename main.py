@@ -1,8 +1,5 @@
 from time import sleep
 from machine import I2C, Pin
-from sensors.tcs34725 import TCS34725
-import utils
-from pathfinder import find_route
 from motors import Motor, Servo
 from robot import Robot
 

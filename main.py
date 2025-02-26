@@ -40,8 +40,7 @@ pins = {'outer_sensorL_pin' : 18, 'outer_sensorR_pin' : 19,
         'led_pin' : 14, 'button_pin': 12 }
 
 # Robot class
-agv = Robot(i2c_bus, pins, phys_params={'turning_time': 1})
-
+agv = Robot(i2c_bus, pins, phys_params={'turning_time': 1, 'axel_width': 1, 'sensor_to_axel': 1}) # ISSUE: When calling this function we get some errors. Most recently line 33 (function doesn't take keyword arguments)
 def onPress():
     print("Pressed")
     agv.forward(75, line_follow= True, junction_decision= False)

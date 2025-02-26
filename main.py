@@ -43,7 +43,8 @@ pins = {'outer_sensorL_pin' : 18, 'outer_sensorR_pin' : 19,
 agv = Robot(i2c_bus, pins, phys_params={'turning_time': 1})
 
 def onPress():
-        agv.forward(75, line_follow= True, junction_decision= False)
+    print("Pressed")
+    agv.forward(75, line_follow= True, junction_decision= False)
 
 while True:
     if agv.button.value() == 1:

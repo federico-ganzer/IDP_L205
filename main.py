@@ -4,8 +4,6 @@ from motors import Motor, Servo
 from robot import Robot
 
 """
-
-
 motorR = Motor(4, 5)
 motorL = Motor(7, 6)
 
@@ -34,28 +32,15 @@ while True:
 # I2c bus
 i2c_bus = I2C(0, sda=Pin(16), scl=Pin(17))
 
-button_pin = 12
-led_pin = 14
-
-outer_sensorL_pin = 18
-outer_sensorL_pin = 19
-line_sensorR_pin = 20
-line_sensorL_pin = 21
-motorR_pwm_pin = 4 # HARD CODED
-motorR_dir_pin = 5 # HARD CODED
-motorL_pwm_pin = 6 # HARD CODED
-motorL_dir_pin = 7 # HARD CODED
-servo_pin1 = 13
-servo_pin2 = 15
-
-
-pins = [button_pin, led_pin, line_sensorL_pin,
-        line_sensorR_pin, motorR_pwm_pin, motorR_dir_pin,
-        motorL_pwm_pin, motorL_dir_pin, servo_pin1, servo_pin2]
+pins = {'outer_sensorL_pin' : 18, 'outer_sensorR_pin' : 19,
+        'line_sensorR_pin' : 20, 'line_sensorL_pin' : 21,
+        'motorR_pwm_pin' : 4, 'motorR_dir_pin' : 5, # Motor Pins are Hard Coded in Robot()
+        'motorL_pwm_pin' : 6, 'motorL_dir_pin' : 7, # Motor Pins are Hard Coded in Robot()
+        'servo_pin1' : 13, 'servo_pin2' : 15,
+        'led_pin' : 14, 'button_pin': 12 }
 
 # Robot class
 agv = Robot(i2c_bus, pins, phys_params={'turning_time': 1})
-
 
 def onPress():
         agv.forward(75, line_follow= True, junction_decision= False)
@@ -65,22 +50,6 @@ while True:
         onPress()
         break
 
-
-
-
-'''
-Place holder for testing:
-TODO: Replace button press with line sensor
-'''
-
-#led = Pin(14, Pin.OUT)
-#button = Pin(12, Pin.IN, Pin.PULL_DOWN)
-#
-#while True:
-#  led.value(button.value())
-#  sleep(0.1)
-#  print(button.value())
-    
 
 '''
 1. Observe colour of block

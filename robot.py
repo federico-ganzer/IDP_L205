@@ -42,12 +42,12 @@ class Robot():
         self.tcs = TCS34725(i2c_bus) # Colour Sensor
         
         #GPIO Connections
-        self.button = Pin(pins[0], Pin.IN, Pin.PULL_DOWN)
-        self.led = Pin(pins[1], Pin.OUT)
-        self.line_sensorL = Pin(pins[2], Pin.IN, Pin.PULL_DOWN) # Left Line Sensor
-        self.line_sensorR = Pin(pins[3], Pin.IN, Pin.PULL_DOWN) # Right Line Sensor
-        self.outer_sensorL = Pin(pins[10], Pin.IN, Pin.PULL_DOWN) # Left Outer Sensor
-        self.outer_sensorR = Pin(pins[11], Pin.IN, Pin.PULL_DOWN)
+        self.button = Pin(pins['button_pin'], Pin.IN, Pin.PULL_DOWN)
+        self.led = Pin(pins['led_pin'], Pin.OUT)
+        self.line_sensorL = Pin(pins['line_sensorL_pin'], Pin.IN, Pin.PULL_DOWN) # Left Line Sensor
+        self.line_sensorR = Pin(pins['line_sensorR_pin'], Pin.IN, Pin.PULL_DOWN) # Right Line Sensor
+        self.outer_sensorL = Pin(pins['outer_sensorL_pin'], Pin.IN, Pin.PULL_DOWN) # Left Outer Sensor
+        self.outer_sensorR = Pin(pins['outer_sensorR_pin'], Pin.IN, Pin.PULL_DOWN)
         
         
         #Motors 

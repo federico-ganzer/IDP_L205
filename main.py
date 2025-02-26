@@ -3,6 +3,34 @@ from machine import I2C, Pin
 from motors import Motor, Servo
 from robot import Robot
 
+"""
+
+
+motorR = Motor(4, 5)
+motorL = Motor(7, 6)
+
+def onPress():
+    print("pressed")
+    startTime = time.time()
+    print(startTime)
+    timeDiff = 0
+    
+    while timeDiff < 2.65:
+        timeDiff = time.time() - startTime
+        
+    print(time.time() - startTime)
+    motorR.stop()
+    motorL.stop()
+
+while True:
+    if button.value() == 1:
+        onPress()
+        break
+
+"""
+
+
+
 # I2c bus
 i2c_bus = I2C(0, sda=Pin(16), scl=Pin(17))
 

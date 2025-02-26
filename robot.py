@@ -138,7 +138,7 @@ class Robot():
         pass
     
     def pickup(self):
-        if utils.check_centering():
+        if utils.check_centering(): # check might not be necessary
             
             '''
             Pick up the block and read colour:

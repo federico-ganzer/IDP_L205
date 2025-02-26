@@ -15,7 +15,7 @@ class Motor():
 
     def reverse(self, speed):
         self.dir.value(1)
-        self.pwm.duty_u16(speed)
+        self.pwm.duty_u16(int(65535*speed/100))
 
     def stop(self):
         self.pwm.duty_u16(0)

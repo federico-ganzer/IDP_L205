@@ -35,8 +35,8 @@ class Robot():
         self._prev_err = 0
         self._integral = 0
         self.kp = 1
-        self.ki = 0
-        self.kd = 0
+        self.ki = 0.01
+        self.kd = 0.5
         
         #I2C Sensors
         self.tcs = TCS34725(i2c_bus) # Colour Sensor
@@ -71,14 +71,14 @@ class Robot():
             return False
     
     
-    def forward(self, speed, line_follow=False):
+    def forward(self, speed, line_follow=False, junction_decision=False):
         '''
         Move the robot forward (CURRENTLY MOTOR TEST CODE)
         TODO: Implement line following algorithm
         '''
         while True:
             Junction = self.detect_junction()
-            if Junction:
+            if Junction and junction_decision:
                 self.motorR.stop()
                 self.motorL.stop()
                 return Junction

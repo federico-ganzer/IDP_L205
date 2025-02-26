@@ -28,9 +28,17 @@ pins = [button_pin, led_pin, line_sensorL_pin,
 # Robot class
 agv = Robot(i2c_bus, pins, phys_params={'turning_time': 1})
 
+
+def onPress():
+        agv.forward(75, line_follow= True, junction_decision= False)
+
 while True:
-    if agv.button.value() == 0:
-        agv.forward(100)
+    if agv.button.value() == 1:
+        onPress()
+        break
+
+
+
 
 '''
 Place holder for testing:

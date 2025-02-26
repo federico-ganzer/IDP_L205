@@ -52,8 +52,8 @@ class Robot():
         
         #Motors 
         #TODO: Check if pins are correct before running
-        self.motorR = Motor(pins[4], pins[5]) # Right Motor
-        self.motorL = Motor(pins[6], pins[7]) # Left Motor
+        self.motorR = Motor(4, 5) # Right Motor
+        self.motorL = Motor(7, 6) # Left Motor
         self.servo1 = Servo(pins[8]) # Servo 1
         self.servo2 = Servo(pins[9]) # Servo 2
 

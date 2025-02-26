@@ -2,7 +2,7 @@ from machine import Pin, PWM
 from utime import sleep
 
 class Motor():
-    def __init__(self, pwm_pin, dir_pin):
+    def __init__(self, dir_pin, pwm_pin):
         self.pwm = PWM(Pin(pwm_pin)) # set speed
         self.dir = Pin(dir_pin, Pin.OUT) # set direction
         self.dir.value(0) # set direction to forward

@@ -8,12 +8,15 @@ i2c_bus = I2C(0, sda=Pin(16), scl=Pin(17))
 
 button_pin = 12
 led_pin = 14
-line_sensorL_pin = 6
-line_sensorR_pin = 7
-motorR_pwm_pin = 4
-motorR_dir_pin = 5
-motorL_pwm_pin = 6
-motorL_dir_pin = 7
+
+outer_sensorL_pin = 18
+outer_sensorL_pin = 19
+line_sensorR_pin = 20
+line_sensorL_pin = 21
+motorR_pwm_pin = 4 # HARD CODED
+motorR_dir_pin = 5 # HARD CODED
+motorL_pwm_pin = 6 # HARD CODED
+motorL_dir_pin = 7 # HARD CODED
 servo_pin1 = 13
 servo_pin2 = 15
 

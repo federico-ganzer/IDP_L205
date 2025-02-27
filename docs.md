@@ -35,6 +35,10 @@
 **File:** `sensors.py`  
 **Description:**  Includes classes and methods responsible for sensor reading
 
+### Motor
+**File:** `motor.py`
+**Description:** Includes one class definition that is used primarily in the `robot.py`, that controls the motor movements. 
+
 ### other
 - `utils.py`: Contains utility helper functions to check for validity of manouvres.
 

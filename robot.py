@@ -34,9 +34,9 @@ class Robot():
         self.right_sensor_hist = deque([0]*self._window_size, maxlen=self._window_size)
         self._prev_err = 0
         self._integral = 0
-        self.kp = 1
-        self.ki = 0.01
-        self.kd = 0.5
+        self.kp = 20
+        self.ki = 0.05
+        self.kd = 1
         
         #I2C Sensors
         self.tcs = TCS34725(i2c_bus) # Colour Sensor
@@ -81,7 +81,15 @@ class Robot():
             if Junction and junction_decision:
                 self.motorR.stop()
                 self.motorL.stop()
+            
+                '''
+                 call decision
+                 returns "left"[-], "right"[+] or "zero"
+                 remove current node from route
+                '''
+                
                 return Junction
+
             if line_follow:
                 self.follow_line()
             else:
@@ -114,8 +122,8 @@ class Robot():
         
         correction = self.kp*err + self.ki*self._integral + self.kd*diff
         
-        self.motorR.forward(100 + correction)
-        self.motorL.forward(100 - correction)
+        self.motorR.forward(100 - correction)
+        self.motorL.forward(100 + correction)
         
         
     def turn(self, new_direction):
@@ -171,6 +179,12 @@ class Robot():
             self.block = False
             self.spin()
             pass
+        
+    def junction_decision(self):
+        '''
+        2D cross product between direction and the direction of next edge
+        '''
+        pass
     
         
     

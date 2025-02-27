@@ -48,11 +48,9 @@ class Robot():
         self.line_sensorL = Pin(pins['line_sensorL_pin'], Pin.IN, Pin.PULL_DOWN) # Left Line Sensor
         self.line_sensorR = Pin(pins['line_sensorR_pin'], Pin.IN, Pin.PULL_DOWN) # Right Line Sensor
         self.outer_sensorL = Pin(pins['outer_sensorL_pin'], Pin.IN, Pin.PULL_DOWN) # Left Outer Sensor
-        self.outer_sensorR = Pin(pins['outer_sensorR_pin'], Pin.IN, Pin.PULL_DOWN)
+        self.outer_sensorR = Pin(pins['outer_sensorR_pin'], Pin.IN, Pin.PULL_DOWN) # Right Outer Sensor
         
-        
-        #Motors 
-        #TODO: Check if pins are correct before running
+        #Motors and Servos
         self.motorR = Motor(4, 5) # Right Motor
         self.motorL = Motor(7, 6) # Left Motor
         self.servo1 = Servo(pins['servo_pin1']) # Servo 1
@@ -72,24 +70,28 @@ class Robot():
             return False
     
     
-    def forward(self, speed, line_follow=False, junction_decision=False):
+    def forward(self, speed, line_follow= True):
         '''
         Move the robot forward (CURRENTLY MOTOR TEST CODE)
         TODO: Implement line following algorithm
         '''
         while True:
-            Junction = self.detect_junction()
-            if Junction and junction_decision:
-                self.motorR.stop()
-                self.motorL.stop()
-            
+            junction = self.detect_junction()
+            if junction:
+                if self.current_route is not None:
+                    self.current_node = self.current_route.pop(0)
+                #self.motorR.stop()
+                #self.motorL.stop()
+                decision = self.junction_decision()
+                if decision != 0:
+                    self.turn(junction, decision)
+                
                 '''
                  call decision
-                 returns "left"[-], "right"[+] or "zero"
+                 returns "left"[+], "right"[-] or "zero"
                  remove current node from route
                 '''
                 
-                return Junction
 
             if line_follow:
                 self.follow_line()
@@ -127,14 +129,20 @@ class Robot():
         self.motorL.forward(100 + correction)
         
         
-    def turn(self, new_direction):
+    def turn(self, junction_type, decision):
         '''
         Turn the robot in the specified direction
+        TODO: REVISE TURNING MOTOR CONTROL
         '''
-        if utils.valid_turn(new_direction): # remember to check if turn is valid
-            self.motorR.forward(100)
-            self.motorL.reverse(100)
+        
+        if junction_type == 'L' or junction_type == 'T' and decision > 0: #sign must be the same for turn to be valid
+            self.motorR.forward(80)
+            self.motorL.reverse(50)
             sleep(self.turning_time/2)
+            
+        elif junction_type == 'R' or junction_type == 'T' and decision < 0:
+            self.motorR.reverse(50)
+            self.motorL.forward(80)
             
     
     def spin(self):
@@ -190,7 +198,6 @@ class Robot():
             current_direction_x, current_direction_y = self.current_direction[0], self.current_direction[1]
             next_direction_x = self.current_route[2][0] - self.current_route[1][0]
             next_direction_y = self.current_route[2][1] - self.current_route[1][1]
-            
             turn = current_direction_x * next_direction_y - current_direction_y * next_direction_x
             
             return turn

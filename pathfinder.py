@@ -4,7 +4,10 @@ import heapq
 Each path defined in for of [start, end, path[list], length, nturns]
 Twin of each path is also defined [end, start, -1*path[list][:-1], length, nturns]
 
+TODO: ADD CORNER NODES
 '''
+
+
  # 'start_node_id': {connected_node_id: distance}
 adj_list = { 'START': [('3', 1.0)],
 
@@ -44,24 +47,24 @@ adj_list = { 'START': [('3', 1.0)],
         }
 
 node_to_coord = { 'START': (0, -1),
-    '1': (-2, 0),
-    '2': (-1, 0),
-    '3': (0, 0),
-    'DP1': (-2, -1),
-    'DP2': (2, -1),
-    '4': (2, 0),
-    '5': (-2, 2),
-    '6': (0, 2),
-    'A': (-1, 1),
-    'B': (1, 1),
-    'C': (-1, 3),
-    'D': (1, 3),
-    '7': (1, 2),
-    '8': (2, 2),
-    '9': (0, 3),
-    '10': (0, 4),
-    '11': (1, 4)
-}
+                  '1': (-2, 0),
+                  '2': (-1, 0),
+                  '3': (0, 0),
+                  'DP1': (-2, -1),
+                  'DP2': (2, -1),
+                  '4': (2, 0),
+                  '5': (-2, 2),
+                  '6': (0, 2),
+                  'A': (-1, 1),
+                  'B': (1, 1),
+                  'C': (-1, 3),
+                  'D': (1, 3),
+                  '7': (1, 2),
+                  '8': (2, 2),
+                  '9': (0, 3),
+                  '10': (0, 4),
+                  '11': (1, 4)
+                }
 
 def dijkstra(start, end):
     '''
@@ -94,5 +97,5 @@ def dijkstra(start, end):
     return None
 
 #test
-print(dijkstra('DP2', 'C'))
+#print(dijkstra('DP2', 'C'))
 

@@ -2,7 +2,7 @@ from machine import Pin
 from time import sleep
 from sensors.tcs34725 import TCS34725
 import utils
-from pathfinder import find_route
+from pathfinder import dijkstra
 from motors import Motor, Servo
 from collections import deque
 
@@ -14,8 +14,9 @@ class Robot():
         
         # State Variables
         self.light = False # Boolean for light flashing
-        self.current_route = []
         self.current_node = 'START'
+        self.current_target = None
+        self.current_route = dijkstra(self.current_node, self.current_target) # List of nodes to visit
         self.current_direction = 'N'
         self.current_destination = None
         self.block = False
@@ -165,7 +166,7 @@ class Robot():
             
             #update state
             self.current_target = target
-            self.current_route = find_route(self.current_node, target)
+            self.current_route = dijkstra(self.current_node, target)
             self.block = True
             self.visited_customers.add(self.current_node)
             

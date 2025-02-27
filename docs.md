@@ -36,7 +36,7 @@
 **Description:**  Includes classes and methods responsible for sensor reading
 
 ### Motor
-**File:** `motor.py`
+**File:** `motors.py`
 **Description:** Includes one class definition that is used primarily in the `robot.py`, that controls the motor movements. 
 
 ### other

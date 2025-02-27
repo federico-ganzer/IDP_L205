@@ -6,19 +6,19 @@ Twin of each path is also defined [end, start, -1*path[list][:-1], length, nturn
 
 '''
  # 'start_node_id': {connected_node_id: distance}
-graph = { 'START': [('3', 1.0)],
+adj_list = { 'START': [('3', 1.0)],
 
-            '1': [('DP2', 1.0), ('5', 2.0), ('2', 1.0)],
+            '1': [('DP1', 1.0), ('5', 2.0), ('2', 1.0)],
 
             '2': [('A', 1.0), ('3', 1.0), ('1', 1.0)],
 
             '3': [('START', 1.0), ('2', 1.0), ('4', 2.0)],
 
-            'DP1': [('4', 1.0)],
+            'DP2': [('4', 1.0)],
 
-            'DP2': [('1', 1.0)],
+            'DP1': [('1', 1.0)],
 
-            '4': [('DP1', 1.0), ('3', 2.0), ('8', 2.0)],
+            '4': [('DP2', 1.0), ('3', 2.0), ('8', 2.0)],
 
             '5': [('1', 2.0), ('6', 2.0), ('10', 4.0)],
 
@@ -43,10 +43,33 @@ graph = { 'START': [('3', 1.0)],
             '11': [('10', 1.0), ('D', 1.0), ('8', 3.0)]
         }
 
-def dijkstra(adj_list, start, end):
+node_to_coord = { 'START': (0, -1),
+    '1': (-2, 0),
+    '2': (-1, 0),
+    '3': (0, 0),
+    'DP1': (-2, -1),
+    'DP2': (2, -1),
+    '4': (2, 0),
+    '5': (-2, 2),
+    '6': (0, 2),
+    'A': (-1, 1),
+    'B': (1, 1),
+    'C': (-1, 3),
+    'D': (1, 3),
+    '7': (1, 2),
+    '8': (2, 2),
+    '9': (0, 3),
+    '10': (0, 4),
+    '11': (1, 4)
+}
+
+def dijkstra(start, end):
     '''
     Finds shortest path from start to end using Dijkstra's algorithm.
     '''
+    if start not in adj_list or end not in adj_list:
+        return None
+    
     pq = [(0, start)]
     distances = {start: 0}
     pred = {start: None}
@@ -59,7 +82,7 @@ def dijkstra(adj_list, start, end):
             while node is not None:
                 path.append(node)
                 node = pred[node]
-            return path[::-1]
+            return [node_to_coord[node] for node in path[::-1]]
         
         for neighbor, distance in adj_list.get(node, []):
             new_distance = current_distance + distance # modification can be made here to include turns
@@ -71,11 +94,5 @@ def dijkstra(adj_list, start, end):
     return None
 
 #test
-print(dijkstra(graph, 'DP1', 'C'))
+print(dijkstra('DP2', 'C'))
 
-# junction_id : (coordinate)
-
-
-def find_route(start, end):
-    
-    return

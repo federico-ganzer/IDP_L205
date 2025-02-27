@@ -17,7 +17,7 @@ class Robot():
         self.current_node = 'START'
         self.current_target = None
         self.current_route = dijkstra(self.current_node, self.current_target) # List of nodes to visit
-        self.current_direction = 'N'
+        self.current_direction = (0, 1) # starting direction as tuple
         self.current_destination = None
         self.block = False
         self.visited_customers = set()
@@ -185,7 +185,15 @@ class Robot():
         '''
         2D cross product between direction and the direction of next edge
         '''
-        pass
+        if self.current_route is not None:
+            
+            current_direction_x, current_direction_y = self.current_direction[0], self.current_direction[1]
+            next_direction_x = self.current_route[2][0] - self.current_route[1][0]
+            next_direction_y = self.current_route[2][1] - self.current_route[1][1]
+            
+            turn = current_direction_x * next_direction_y - current_direction_y * next_direction_x
+            
+            return turn
     
         
     

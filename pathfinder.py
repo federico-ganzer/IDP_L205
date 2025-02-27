@@ -71,7 +71,7 @@ def dijkstra(adj_list, start, end):
     return None
 
 #test
-print(dijkstra(graph, 'C', 'DP1'))
+print(dijkstra(graph, 'DP1', 'C'))
 
 # junction_id : (coordinate)
 

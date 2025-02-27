@@ -27,8 +27,6 @@ while True:
 
 """
 
-
-
 # I2c bus
 i2c_bus = I2C(0, sda=Pin(16), scl=Pin(17))
 

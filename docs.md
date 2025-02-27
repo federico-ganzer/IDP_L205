@@ -19,6 +19,9 @@
 
 **Description:** Contains `Robot()` class. Robot contains methods for AGV control for manouvring and collecting/depositing loads. Class is initialised with pin numbers associated with the servos, motors and sensors and can be easily modified as a modular system (eg. if sensor or servo additions are made). 
 
+**Methods:**
+- `forward()`: Drives robot motors at desired speed with optional line following and junction decision logic. Uses PID control for straight line following.
+
 ### Pathfinder
 
 **File:** `pathfinder.py`

@@ -30,8 +30,8 @@ class Robot():
         #line following params
         
         self._window_size = 5
-        self.left_sensor_hist = deque([0]*self._window_size, maxlen=self._window_size)
-        self.right_sensor_hist = deque([0]*self._window_size, maxlen=self._window_size)
+        self.left_sensor_hist = deque([0]*self._window_size, self._window_size)
+        self.right_sensor_hist = deque([0]*self._window_size, self._window_size)
         self._prev_err = 0
         self._integral = 0
         self.kp = 1
@@ -54,8 +54,8 @@ class Robot():
         #TODO: Check if pins are correct before running
         self.motorR = Motor(4, 5) # Right Motor
         self.motorL = Motor(7, 6) # Left Motor
-        self.servo1 = Servo(pins[8]) # Servo 1
-        self.servo2 = Servo(pins[9]) # Servo 2
+        self.servo1 = Servo(pins['servo_pin1']) # Servo 1
+        self.servo2 = Servo(pins['servo_pin2']) # Servo 2
 
     def detect_junction(self):
         '''
@@ -114,8 +114,9 @@ class Robot():
         
         correction = self.kp*err + self.ki*self._integral + self.kd*diff
         
-        self.motorR.forward(100 + correction)
-        self.motorL.forward(100 - correction)
+        self.motorR.forward(75 + correction)
+        self.motorL.forward(75 - correction)
+
         
         
     def turn(self, new_direction):

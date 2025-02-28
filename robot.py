@@ -14,11 +14,15 @@ class Robot():
         
         # State Variables
         self.light = False # Boolean for light flashing
+        
         self.current_node = 'START'
-        self.current_target = None
+        self.current_target = 'A'
         self.current_route = dijkstra(self.current_node, self.current_target) # List of nodes to visit
+        
         self.current_direction = (0, 1) # starting direction as tuple
-        self.current_destination = None
+        self.next_direction = None
+        
+
         self.block = False
         self.visited_customers = set()
         
@@ -128,8 +132,7 @@ class Robot():
         
         self.motorR.forward(100 - correction)
         self.motorL.forward(100 + correction)
-        
-        
+       
     def turn(self, junction_type, decision):
         '''
         Turn the robot in the specified direction
@@ -139,21 +142,30 @@ class Robot():
         '''
         self.turning_time must be set based on motor speed and turning
         radius from phys_params - add max wheel speed to turn params
-        
         '''
-        
         
         if junction_type == 'L' or junction_type == 'T' and decision > 0: #sign must be the same for turn to be valid
             self.motorR.forward(80)
             self.motorL.stop()
-            sleep(self.turning_time)
+            sleep(self.turning_time - 0.5)
+            while self.line_sensorR.value() == 0:
+                self.motorR.forward(80)
+                self.motorL.stop()
+            # update direction
+            if self.next_direction is not None:
+                self.current_direction = self.next_direction
             
         elif junction_type == 'R' or junction_type == 'T' and decision < 0:
             self.motorR.stop()
             self.motorL.forward(80)
-            sleep(self.turning_time) # define turning time based on turning radius
-            
-    
+            sleep(self.turning_time - 0.5)# define turning time based on turning radius
+            while self.line_sensorL.value() == 0:
+                self.motorR.stop()
+                self.motorL.forward(80)
+            # update direction
+            if self.next_direction is not None:
+                self.current_direction = self.next_direction 
+                
     def spin(self):
         '''
         Backout the robot
@@ -208,7 +220,7 @@ class Robot():
             next_direction_x = self.current_route[2][0] - self.current_route[1][0]
             next_direction_y = self.current_route[2][1] - self.current_route[1][1]
             turn = current_direction_x * next_direction_y - current_direction_y * next_direction_x
-            
+            self.next_direction = (next_direction_x, next_direction_y)
             return turn
     
         

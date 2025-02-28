@@ -24,8 +24,9 @@ class Robot():
         
         
         #physical parameters
-        self.turning_time = phys_params['turning_time']
-        self.axel_width = phys_params['axel_width']
+        
+        #time required to turn 90 degrees (with only one wheel active) = time required to turn 180 degrees with 2 wheels active
+        self.turning_time = (3.14159*phys_params['axel_width'])/(2*phys_params['motor_max_speed']*phys_params['wheel_radius'])
         self.sensor_to_axel = phys_params['sensor_to_axel']
         
         #line following params
@@ -135,14 +136,22 @@ class Robot():
         TODO: REVISE TURNING MOTOR CONTROL
         '''
         
+        '''
+        self.turning_time must be set based on motor speed and turning
+        radius from phys_params - add max wheel speed to turn params
+        
+        '''
+        
+        
         if junction_type == 'L' or junction_type == 'T' and decision > 0: #sign must be the same for turn to be valid
             self.motorR.forward(80)
-            self.motorL.reverse(50)
-            sleep(self.turning_time/2)
+            self.motorL.stop()
+            sleep(self.turning_time)
             
         elif junction_type == 'R' or junction_type == 'T' and decision < 0:
-            self.motorR.reverse(50)
+            self.motorR.stop()
             self.motorL.forward(80)
+            sleep(self.turning_time) # define turning time based on turning radius
             
     
     def spin(self):

@@ -4,7 +4,7 @@ from motors import Motor, Servo
 from robot import Robot
 
 # I2c bus
-i2c_bus = I2C(0, sda=Pin(16), scl=Pin(17))
+i2c_bus = I2C(0, sda= Pin(16), scl= Pin(17), freq= 400000)
 
 pins = {'outer_sensorL_pin' : 18, 'outer_sensorR_pin' : 19,
         'line_sensorR_pin' : 20, 'line_sensorL_pin' : 21,
@@ -13,8 +13,12 @@ pins = {'outer_sensorL_pin' : 18, 'outer_sensorR_pin' : 19,
         'servo_pin1' : 13, 'servo_pin2' : 15,
         'led_pin' : 14, 'button_pin': 12 }
 
+phys_params={'axel_width': 1, 'sensor_to_axel': 1, 'wheel_radius': 0.03,
+             'motor_max_speed': 4.18879}
+
 # Robot class
-agv = Robot(i2c_bus, pins, phys_params={'turning_time': 1, 'axel_width': 1, 'sensor_to_axel': 1}) # ISSUE: When calling this function we get some errors. Most recently line 33 (function doesn't take keyword arguments)
+agv = Robot(i2c_bus, pins, phys_params) 
+
 def onPress():
     print("Pressed")
     agv.forward(75, line_follow= True)

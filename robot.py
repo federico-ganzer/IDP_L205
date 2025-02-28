@@ -31,6 +31,7 @@ class Robot():
         
         #time required to turn 90 degrees (with only one wheel active) = time required to turn 180 degrees with 2 wheels active
         self.turning_time = (3.14159*phys_params['axel_width'])/(2*phys_params['motor_max_speed']*phys_params['wheel_radius'])
+        self.turning_prep_time = 0.5
         self.sensor_to_axel = phys_params['sensor_to_axel']
         
         self._speed = 100
@@ -92,7 +93,7 @@ class Robot():
                 decision = self.junction_decision()
                 if decision != 0:
                     self.turn(junction, decision)
-                
+                    decision = 0 # BUG: don't know if i need to do this
                 '''
                  call decision
                  returns "left"[+], "right"[-] or "zero"
@@ -142,36 +143,38 @@ class Robot():
         '''
         - self.turning_time must be set based on motor speed and turning
         radius from phys_params - add max wheel speed to turn params
-        - 0.5 seconds removed to account for error in turning time
-        - following this dt, robot will turn until it detects the line 
-        in the new direction.
         '''
         
-        if junction_type == 'L' or junction_type == 'T' and decision > 0:
-            self.motorR.forward(80)
-            self.motorL.stop()
-            sleep(self.turning_time - 0.5)
-            while self.line_sensorR.value() == 0:
-                self.motorR.forward(80)
-                self.motorL.stop()
-            # update direction
-            if self.next_direction is not None:
-                self.current_direction = self.next_direction
-            self.forward(self._speed, line_follow= True)
+        
+        if junction_type == 'L' or junction_type == 'T' and decision > 0: #sign must be the same for turn to be valid
 
-            
-        elif junction_type == 'R' or junction_type == 'T' and decision < 0:
-            self.motorR.stop()
+            self.motorR.forward(80)
             self.motorL.forward(80)
-            sleep(self.turning_time - 0.5)
-            while self.line_sensorL.value() == 0:
-                self.motorR.stop()
+            sleep(self.turning_prep_time)
+
+            self.motorR.forward(80)
+            self.motorL.reverse(40)
+            sleep(self.turning_prep_time)
+
+            while not self.line_sensorR.value():
+                self.motorR.forward(80)
+                self.motorL.reverse(40)
+
+        elif junction_type == 'R' or junction_type == 'T' and decision < 0:
+
+            self.motorR.forward(80)
+            self.motorL.forward(80)
+            sleep(self.turning_prep_time)
+
+            self.motorR.reverse(40)
+            self.motorL.forward(80)
+            sleep(self.turning_prep_time)
+
+            while not self.line_sensorL.value():
+                self.motorR.reverse(40)
                 self.motorL.forward(80)
-            # update direction
-            if self.next_direction is not None:
-                self.current_direction = self.next_direction 
-            self.forward(self._speed, line_follow= True)
-                
+
+
     def spin(self):
         '''
         Backout the robot

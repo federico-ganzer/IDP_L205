@@ -37,7 +37,7 @@
 
 ### Motor
 **File:** `motors.py`
-**Description:** Includes one class definition that is used primarily in the `robot.py`, that controls the motor movements. 
+**Description:** Includes one class definition that is used primarily in the `robot.py`, that controls the motor movements. Takes in parameters of the pins. 
 
 ### other
 - `utils.py`: Contains utility helper functions to check for validity of manouvres.

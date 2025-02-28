@@ -135,16 +135,10 @@ class Robot():
         self.motorL.forward(100 + correction)
        
     def turn(self, junction_type, decision):
-        '''
-        Turn the robot in the specified direction
-        TODO: REVISE TURNING MOTOR CONTROL
-        '''
         
         '''
-        - self.turning_time must be set based on motor speed and turning
-        radius from phys_params - add max wheel speed to turn params
+        Turn the robot in the specified direction defined by junction_type and the turn decision
         '''
-        
         
         if junction_type == 'L' or junction_type == 'T' and decision > 0: #sign must be the same for turn to be valid
 
@@ -159,7 +153,11 @@ class Robot():
             while not self.line_sensorR.value():
                 self.motorR.forward(80)
                 self.motorL.reverse(40)
-
+            #update state once turn is complete
+            if self.next_direction is not None:
+                self.current_direction = self.next_direction
+            self.forward(self._speed, line_follow= True)
+            
         elif junction_type == 'R' or junction_type == 'T' and decision < 0:
 
             self.motorR.forward(80)
@@ -173,7 +171,10 @@ class Robot():
             while not self.line_sensorL.value():
                 self.motorR.reverse(40)
                 self.motorL.forward(80)
-
+            #update state once turn is complete
+            if self.next_direction is not None:
+                self.current_direction = self.next_direction
+            self.forward(self._speed, line_follow= True)
 
     def spin(self):
         '''
@@ -232,4 +233,3 @@ class Robot():
             self.spin()
             pass
             
-    

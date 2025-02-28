@@ -27,13 +27,16 @@ class Robot():
         self.visited_customers = set()
         
         
-        #physical parameters
+        #Physical parameters
         
         #time required to turn 90 degrees (with only one wheel active) = time required to turn 180 degrees with 2 wheels active
         self.turning_time = (3.14159*phys_params['axel_width'])/(2*phys_params['motor_max_speed']*phys_params['wheel_radius'])
         self.sensor_to_axel = phys_params['sensor_to_axel']
         
-        #line following params
+        self._speed = 100
+        
+        
+        #Line following params
         
         self._window_size = 5
         self.left_sensor_hist = deque([0]*self._window_size, self._window_size)
@@ -74,7 +77,6 @@ class Robot():
         else:
             return False
     
-    
     def forward(self, speed, line_follow= True):
         '''
         Move the robot forward (CURRENTLY MOTOR TEST CODE)
@@ -96,14 +98,12 @@ class Robot():
                  returns "left"[+], "right"[-] or "zero"
                  remove current node from route
                 '''
-                
 
             if line_follow:
                 self.follow_line()
             else:
                 self.motorR.forward(speed)
                 self.motorL.forward(speed)
-    
     
     def _get_moving_avg(self, sensor_hist):
         return sum(sensor_hist)/len(sensor_hist)
@@ -140,11 +140,14 @@ class Robot():
         '''
         
         '''
-        self.turning_time must be set based on motor speed and turning
+        - self.turning_time must be set based on motor speed and turning
         radius from phys_params - add max wheel speed to turn params
+        - 0.5 seconds removed to account for error in turning time
+        - following this dt, robot will turn until it detects the line 
+        in the new direction.
         '''
         
-        if junction_type == 'L' or junction_type == 'T' and decision > 0: #sign must be the same for turn to be valid
+        if junction_type == 'L' or junction_type == 'T' and decision > 0:
             self.motorR.forward(80)
             self.motorL.stop()
             sleep(self.turning_time - 0.5)
@@ -154,17 +157,20 @@ class Robot():
             # update direction
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
+            self.forward(self._speed, line_follow= True)
+
             
         elif junction_type == 'R' or junction_type == 'T' and decision < 0:
             self.motorR.stop()
             self.motorL.forward(80)
-            sleep(self.turning_time - 0.5)# define turning time based on turning radius
+            sleep(self.turning_time - 0.5)
             while self.line_sensorL.value() == 0:
                 self.motorR.stop()
                 self.motorL.forward(80)
             # update direction
             if self.next_direction is not None:
                 self.current_direction = self.next_direction 
+            self.forward(self._speed, line_follow= True)
                 
     def spin(self):
         '''
@@ -174,6 +180,19 @@ class Robot():
         self.motorL.reverse(100)
         sleep(self.turning_time)
         pass
+    
+    def junction_decision(self):
+        '''
+        2D cross product between direction and the direction of next edge
+        '''
+        if self.current_route is not None:
+            
+            current_direction_x, current_direction_y = self.current_direction[0], self.current_direction[1]
+            next_direction_x = self.current_route[2][0] - self.current_route[1][0]
+            next_direction_y = self.current_route[2][1] - self.current_route[1][1]
+            turn = current_direction_x * next_direction_y - current_direction_y * next_direction_x
+            self.next_direction = (next_direction_x, next_direction_y)
+            return turn
     
     def pickup(self):
         if utils.check_centering(): # check might not be necessary
@@ -209,19 +228,5 @@ class Robot():
             self.block = False
             self.spin()
             pass
-        
-    def junction_decision(self):
-        '''
-        2D cross product between direction and the direction of next edge
-        '''
-        if self.current_route is not None:
             
-            current_direction_x, current_direction_y = self.current_direction[0], self.current_direction[1]
-            next_direction_x = self.current_route[2][0] - self.current_route[1][0]
-            next_direction_y = self.current_route[2][1] - self.current_route[1][1]
-            turn = current_direction_x * next_direction_y - current_direction_y * next_direction_x
-            self.next_direction = (next_direction_x, next_direction_y)
-            return turn
-    
-        
     

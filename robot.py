@@ -69,6 +69,9 @@ class Robot():
         '''
         Detect junctions using outside line sensors
         '''
+        '''
+        while loop --> moving avg. of (large amount) readings --> threshold --> if statements
+        '''
         if self.outer_sensorL.value() and self.outer_sensorR.value():
             return 'T'
         elif self.outer_sensorL.value():
@@ -76,13 +79,14 @@ class Robot():
         elif self.outer_sensorR.value():
             return 'R'
         else:
-            return False
+            return False # No junction detected
     
     def forward(self, speed, line_follow= True):
         '''
         Move the robot forward (CURRENTLY MOTOR TEST CODE)
         TODO: Implement line following algorithm
         '''
+        self._speed = speed
         while True:
             junction = self.detect_junction()
             if junction:

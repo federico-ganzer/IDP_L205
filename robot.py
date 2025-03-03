@@ -145,8 +145,9 @@ class Robot():
         '''
         
         if junction_type == 'L' or junction_type == 'T' and decision > 0: #sign must be the same for turn to be valid
-
-            # self.left_sensor_hist = deque([0]*self._window_size, self._window_size) need to use this to implement a double ended queue for accurate data checking
+            # Moving average of the right sensor
+            right_sensor_history = deque([0]*10, 10)
+            right_sensor_avg = self._get_moving_avg(right_sensor_history)
             self.motorR.forward(80)
             self.motorL.forward(80)
             sleep(self.turning_prep_time)
@@ -155,7 +156,7 @@ class Robot():
             self.motorL.reverse(40)
             sleep(self.turning_prep_time)
 
-            while not self.line_sensorR.value():
+            while right_sensor_avg != 1:
                 self.motorR.forward(80)
                 self.motorL.reverse(40)
             # update state once turn is complete
@@ -164,6 +165,9 @@ class Robot():
             self.forward(self._speed, line_follow= True)
             
         elif junction_type == 'R' or junction_type == 'T' and decision < 0:
+            # Moving average of the left sensor
+            left_sensor_hist = deque([0]*10, 10)
+            left_sensor_avg = self._get_moving_avg(left_sensor_hist)
 
             self.motorR.forward(80)
             self.motorL.forward(80)
@@ -173,7 +177,7 @@ class Robot():
             self.motorL.forward(80)
             sleep(self.turning_prep_time)
 
-            while not self.line_sensorL.value():
+            while left_sensor_avg != 1:
                 self.motorR.reverse(40)
                 self.motorL.forward(80)
             # update state once turn is complete

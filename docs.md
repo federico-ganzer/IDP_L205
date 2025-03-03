@@ -22,6 +22,13 @@
 **Methods:**
 - `forward()`: Drives robot motors at desired speed with optional line following and junction decision logic. Uses PID control for straight line following.
 - `turn()`: Following a call to `junction_decision()`, the robot performs a 90 degree turn in the direction set by `junction_decision()`, provided that junction type also satisfies the turn. The current state variables are then updated.
+- `junction_decision()`: 
+- `detect_junction()`:
+- `follow_line()`:
+- `spin()`:
+- `pickup()`:
+- `drop()`:
+- `_get_moving_avg()`: This performs the calculation for the average of the double ended queue's implemented in the `follow_line()` and `turn()` functions. 
 
 ### Pathfinder
 

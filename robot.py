@@ -145,7 +145,9 @@ class Robot():
         '''
         
         if junction_type == 'L' or junction_type == 'T' and decision > 0: #sign must be the same for turn to be valid
-
+            # Moving average of the right sensor
+            right_sensor_history = deque([0]*10, 10)
+            right_sensor_avg = self._get_moving_avg(right_sensor_history)
             self.motorR.forward(80)
             self.motorL.forward(80)
             sleep(self.turning_prep_time)
@@ -154,15 +156,18 @@ class Robot():
             self.motorL.reverse(40)
             sleep(self.turning_prep_time)
 
-            while not self.line_sensorR.value():
+            while right_sensor_avg != 1:
                 self.motorR.forward(80)
                 self.motorL.reverse(40)
-            #update state once turn is complete
+            # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
             self.forward(self._speed, line_follow= True)
             
         elif junction_type == 'R' or junction_type == 'T' and decision < 0:
+            # Moving average of the left sensor
+            left_sensor_hist = deque([0]*10, 10)
+            left_sensor_avg = self._get_moving_avg(left_sensor_hist)
 
             self.motorR.forward(80)
             self.motorL.forward(80)
@@ -172,17 +177,17 @@ class Robot():
             self.motorL.forward(80)
             sleep(self.turning_prep_time)
 
-            while not self.line_sensorL.value():
+            while left_sensor_avg != 1:
                 self.motorR.reverse(40)
                 self.motorL.forward(80)
-            #update state once turn is complete
+            # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
             self.forward(self._speed, line_follow= True)
 
     def spin(self):
         '''
-        Backout the robot
+        Backout the robot until the sensors line up with the line again
         '''
         self.motorR.forward(100)
         self.motorL.reverse(100)

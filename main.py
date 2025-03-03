@@ -18,6 +18,9 @@ phys_params={'axel_width': 1, 'sensor_to_axel': 1, 'wheel_radius': 0.03,
 
 # Robot class
 agv = Robot(i2c_bus, pins, phys_params) 
+agv.current_target = 'A'
+agv.current_node = 'START' # Test Route from START to A
+agv.current_direction = (0, 1)
 
 def onPress():
     print("Pressed")

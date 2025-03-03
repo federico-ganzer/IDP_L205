@@ -212,6 +212,12 @@ class Robot():
             turn = current_direction_x * next_direction_y - current_direction_y * next_direction_x
             self.next_direction = (next_direction_x, next_direction_y)
             return turn
+        
+        if self.current_route is None or len(self.current_route) == 0:
+            self.motorL.stop()
+            self.motorR.stop()
+            print("Route Complete")
+            return 0
     
     def pickup(self):
         if utils.check_centering(): # check might not be necessary

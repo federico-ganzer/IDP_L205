@@ -144,10 +144,13 @@ class Robot():
         Turn the robot in the specified direction defined by junction_type and the turn decision
         '''
         
+        
         if junction_type == 'L' or junction_type == 'T' and decision > 0: #sign must be the same for turn to be valid
+
             # Moving average of the right sensor
-            right_sensor_history = deque([0]*10, 10)
-            right_sensor_avg = self._get_moving_avg(right_sensor_history)
+            right_sensor_hist = deque([0]*10, 10)
+            right_sensor_avg = self._get_moving_avg(right_sensor_hist)
+
             self.motorR.forward(80)
             self.motorL.forward(80)
             sleep(self.turning_prep_time)
@@ -159,12 +162,14 @@ class Robot():
             while right_sensor_avg != 1:
                 self.motorR.forward(80)
                 self.motorL.reverse(40)
+                right_sensor_hist.append(self.line_sensorR.value())
             # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
             self.forward(self._speed, line_follow= True)
             
         elif junction_type == 'R' or junction_type == 'T' and decision < 0:
+
             # Moving average of the left sensor
             left_sensor_hist = deque([0]*10, 10)
             left_sensor_avg = self._get_moving_avg(left_sensor_hist)
@@ -180,6 +185,7 @@ class Robot():
             while left_sensor_avg != 1:
                 self.motorR.reverse(40)
                 self.motorL.forward(80)
+                left_sensor_hist.append(self.line_sensorL.value())
             # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction

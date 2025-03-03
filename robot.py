@@ -143,22 +143,23 @@ class Robot():
         
         '''
         Turn the robot in the specified direction defined by junction_type and the turn decision
+        
+        This could have been made more consise somehow, however for the sake of readability I have kept it like this
         '''
         
         
         if junction_type == 'L' or junction_type == 'T' and decision > 0: #sign must be the same for turn to be valid
-
             # Moving average of the right sensor
             right_sensor_hist = deque([0]*10, 10)
             right_sensor_avg = self._get_moving_avg(right_sensor_hist)
-
+            # moves forward slightly to allow room for turning
             self.motorR.forward(80)
             self.motorL.forward(80)
             sleep(self.turning_prep_time)
-
+            # starts turning without the check 
             self.motorR.forward(80)
             self.motorL.reverse(40)
-            sleep(self.turning_prep_time)
+            sleep(0.5)
 
             while right_sensor_avg < 0.8:
                 self.motorR.forward(80)
@@ -175,19 +176,20 @@ class Robot():
             # Moving average of the left sensor
             left_sensor_hist = deque([0]*10, 10)
             left_sensor_avg = self._get_moving_avg(left_sensor_hist)
-
+            # moves forward slightly to allow room for turning
             self.motorR.forward(80)
             self.motorL.forward(80)
             sleep(self.turning_prep_time)
-
+            # starts turning without the check
             self.motorR.reverse(40)
             self.motorL.forward(80)
-            sleep(self.turning_prep_time)
+            sleep(0.5)
 
             while left_sensor_avg < 0.8:
                 self.motorR.reverse(40)
                 self.motorL.forward(80)
                 left_sensor_hist.append(self.line_sensorL.value())
+                left_sensor_avg = self._get_moving_avg(left_sensor_hist)
             # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction

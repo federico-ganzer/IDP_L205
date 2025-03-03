@@ -1,14 +1,8 @@
 import heapq
 
-'''
-Each path defined in for of [start, end, path[list], length, nturns]
-Twin of each path is also defined [end, start, -1*path[list][:-1], length, nturns]
-
-TODO: ADD CORNER NODES
-'''
 
 
- # 'start_node_id': {connected_node_id: distance}
+ # 'node_id': [(connected_node_id, distance)]
 adj_list = { 'START': [('3', 1.0)],
 
             '1': [('DP1', 1.0), ('5', 2.0), ('2', 1.0)],

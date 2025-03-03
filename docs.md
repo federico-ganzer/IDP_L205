@@ -22,8 +22,8 @@
 **Methods:**
 - `forward()`: Drives robot motors at desired speed with optional line following and junction decision logic. Uses PID control for straight line following.
 - `turn()`: Following a call to `junction_decision()`, the robot performs a 90 degree turn in the direction set by `junction_decision()`, provided that junction type also satisfies the turn. The current state variables are then updated.
-- `junction_decision()`: 
-- `detect_junction()`:
+- `junction_decision()`: Using a 2D vector product between the current and next directions, the function returns a value that when positive indicates a left turn, when negative, a right turn, and when zero straight.
+- `detect_junction()`: Uses the two outer line sensors to detect junctions, updating its current position in the process. The junction type 
 - `follow_line()`:
 - `spin()`:
 - `pickup()`:

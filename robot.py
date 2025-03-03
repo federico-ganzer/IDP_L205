@@ -84,7 +84,7 @@ class Robot():
     def forward(self, speed, line_follow= True):
         '''
         Move the robot forward (CURRENTLY MOTOR TEST CODE)
-        TODO: Implement line following algorithm
+        
         '''
         self._speed = speed
         while True:
@@ -95,9 +95,10 @@ class Robot():
                 #self.motorR.stop()
                 #self.motorL.stop()
                 decision = self.junction_decision()
-                if decision != 0:
-                    self.turn(junction, decision)
-                    decision = 0 # BUG: don't know if i need to do this
+                
+                self.turn(junction, decision)
+                
+                # BUG: don't know if i need to do this (if decision == 0 dont turn.)
                 '''
                  call decision
                  returns "left"[+], "right"[-] or "zero"
@@ -216,8 +217,7 @@ class Robot():
         if self.current_route is None or len(self.current_route) == 0:
             self.motorL.stop()
             self.motorR.stop()
-            print("Route Complete")
-            return 0
+            print("Route Complete")          
     
     def pickup(self):
         if utils.check_centering(): # check might not be necessary

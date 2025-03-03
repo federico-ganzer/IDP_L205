@@ -155,7 +155,7 @@ class Robot():
             # moves forward slightly to allow room for turning
             self.motorR.forward(80)
             self.motorL.forward(80)
-            sleep(self.turning_prep_time)
+            sleep(self.turning_prep_time) # consider changing to a function of speed
             # starts turning without the check 
             self.motorR.forward(80)
             self.motorL.reverse(40)

@@ -183,7 +183,7 @@ class Robot():
 
     def spin(self):
         '''
-        Backout the robot
+        Backout the robot until the sensors line up with the line again
         '''
         self.motorR.forward(100)
         self.motorL.reverse(100)

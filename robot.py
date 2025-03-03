@@ -160,10 +160,11 @@ class Robot():
             self.motorL.reverse(40)
             sleep(self.turning_prep_time)
 
-            while right_sensor_avg != 1:
+            while right_sensor_avg < 0.8:
                 self.motorR.forward(80)
                 self.motorL.reverse(40)
                 right_sensor_hist.append(self.line_sensorR.value())
+                right_sensor_avg = self._get_moving_avg(right_sensor_hist)
             # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
@@ -183,7 +184,7 @@ class Robot():
             self.motorL.forward(80)
             sleep(self.turning_prep_time)
 
-            while left_sensor_avg != 1:
+            while left_sensor_avg < 0.8:
                 self.motorR.reverse(40)
                 self.motorL.forward(80)
                 left_sensor_hist.append(self.line_sensorL.value())

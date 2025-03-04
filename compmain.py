@@ -27,9 +27,9 @@ def onPress():
     while True:
         agv.forward(75, line_follow= True)
         if agv.current_node in customers:
-            agv.pickup()
+            agv.pickup() # spin() included
         if agv.current_node in set(['DP1', 'DP2']):
-            agv.drop()
+            agv.drop() # spin() included
             
             min_distance = float('inf')
             
@@ -42,7 +42,7 @@ def onPress():
             
             agv.current_target = min_customer # current_target is set to closest customer to depot
             agv.current_route = min_path
-            agv.spin()
+            
         
                                
 

@@ -97,5 +97,5 @@ def dijkstra(start, end):
                 
     return None
 #test
-print(dijkstra('START', 'D'))
+#print(dijkstra('START', 'D'))
 

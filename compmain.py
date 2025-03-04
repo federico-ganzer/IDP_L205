@@ -1,6 +1,7 @@
 from robot import Robot
 from machine import I2C, Pin
 from time import sleep
+from pathfinder import dijkstra
 
 i2c_bus = I2C(0, sda= Pin(16), scl= Pin(17), freq= 400000)
 
@@ -23,9 +24,27 @@ customers = set(['A', 'B', 'C', 'D'])
 
 
 def onPress():
-    
-    agv.forward(75, line_follow= True)
-    pass
+    while True:
+        agv.forward(75, line_follow= True)
+        if agv.current_node in customers:
+            agv.pickup()
+        if agv.current_node in set(['DP1', 'DP2']):
+            agv.drop()
+            
+            min_distance = float('inf')
+            
+            for customer in customers - agv.visited_customers:# Cycle through not visited customers
+                    path, distance = djisktra(agv.current_node, customer)
+                    min_distance = min(min_distance, distance)
+                    if min_distance == distance:
+                        min_path = path
+                        min_customer = customer
+            
+            agv.current_target = min_customer # current_target is set to closest customer to depot
+            agv.current_route = min_path
+            agv.spin()
+        
+                               
 
 
 

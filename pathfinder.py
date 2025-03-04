@@ -95,7 +95,6 @@ def dijkstra(start, end):
                 pred[neighbor] = node
                 
     return None
-
 #test
-print(dijkstra('START', 'DP2'))
+#print(dijkstra('START', 'DP2'))
 

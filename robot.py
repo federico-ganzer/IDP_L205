@@ -91,12 +91,12 @@ class Robot():
             junction = self.detect_junction()
             if junction:
                 if self.current_route is not None:
-                    self.current_node = self.current_route.pop(0)
-                #self.motorR.stop()
-                #self.motorL.stop()
-                decision = self.junction_decision()
+    
+                    decision = self.junction_decision()
                 
-                self.turn(junction, decision)
+                    self.turn(junction, decision)
+                    
+                    self.current_node = self.current_route.pop(0)
                 
                 # BUG: don't know if i need to do this (if decision == 0 dont turn.)
                 '''

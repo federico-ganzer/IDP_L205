@@ -237,12 +237,18 @@ class Robot():
         if utils.check_centering(): # check might not be necessary
             
             '''
+            Go forwards until the robot is right in front of the block
+            
             Pick up the block and read colour:
             1. Use ultrasonic sensor to check if block is in front of robot
             2. Check alignment
             4. Turn on colour sensor
             5. forward (include in main as opposed to here?)
             6. activate lift
+
+            Now need to spin
+            then go past the lines
+            then go to back to forward method
             '''
             
             cct, y = self.tcs.read()

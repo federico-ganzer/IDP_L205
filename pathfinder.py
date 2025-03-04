@@ -66,7 +66,7 @@ node_to_coord = { 'START': (0, -1),
                   '13' : (2, 4) 
                 }
 
-def dijkstra(start, end, distance=False):
+def dijkstra(start, end):
     '''
     Finds shortest path from start to end using Dijkstra's algorithm.
     '''
@@ -85,10 +85,8 @@ def dijkstra(start, end, distance=False):
             while node is not None:
                 path.append(node)
                 node = pred[node]
-            if distance:
-                return [node_to_coord[node] for node in path[::-1]], current_distance
-            else:
-                return [node_to_coord[node] for node in path[::-1]], current_distance
+            
+            return ([node_to_coord[node] for node in path[::-1]], current_distance)
         
         for neighbor, distance in adj_list.get(node, []):
             new_distance = current_distance + distance # modification can be made here to include turns

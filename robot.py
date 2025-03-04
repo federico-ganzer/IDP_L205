@@ -17,7 +17,9 @@ class Robot():
         
         self.current_node = 'START'
         self.current_target = 'A'
-        self.current_route = dijkstra(self.current_node, self.current_target) # List of nodes to visit
+        
+        route = dijkstra(self.current_node, self.current_target)
+        self.current_route = route[0] if route is not None else None  # List of nodes to visit
         
         self.current_direction = (0, 1) # starting direction as tuple
         self.next_direction = None
@@ -251,7 +253,9 @@ class Robot():
             
             #update state
             self.current_target = target
-            self.current_route = dijkstra(self.current_node, target)
+            route = dijkstra(self.current_node, target)
+            if route is not None:
+                self.current_route = route[0] # list of nodes to visit
             self.block = True
             self.visited_customers.add(self.current_node)
             

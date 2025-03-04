@@ -42,6 +42,8 @@ class Robot():
         self._window_size = 5
         self.left_sensor_hist = deque([0]*self._window_size, self._window_size)
         self.right_sensor_hist = deque([0]*self._window_size, self._window_size)
+        self.left_outer_sensor_hist = deque([0]*self._window_size, self._window_size)
+        self.right_outer_sensor_hist = deque([0]*self._window_size, self._window_size)
         self._prev_err = 0
         self._integral = 0
         self.kp = 20
@@ -72,11 +74,20 @@ class Robot():
         '''
         while loop --> moving avg. of (large amount) readings --> threshold --> if statements
         '''
-        if self.outer_sensorL.value() and self.outer_sensorR.value():
+        outer_left_sensor = self.outer_sensorL.value()
+        outer_right_sensor = self.outer_sensorR.value()
+        
+        self.left_outer_sensor_hist.append(outer_left_sensor)
+        self.right_outer_sensor_hist.append(outer_right_sensor)
+
+        outer_left_avg = self._get_moving_avg(self.left_outer_sensor_hist)
+        outer_right_avg = self._get_moving_avg(self.right_outer_sensor_hist)
+
+        if outer_left_avg > 0.8 and outer_right_avg > 0.8:
             return 'T'
-        elif self.outer_sensorL.value():
+        elif outer_left_avg > 0.8:
             return 'L'
-        elif self.outer_sensorR.value():
+        elif outer_right_avg > 0.8:
             return 'R'
         else:
             return False # No junction detected

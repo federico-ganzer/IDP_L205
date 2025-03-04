@@ -21,10 +21,10 @@
 
 **Methods:**
 - `forward()`: Drives robot motors at desired speed with optional line following and junction decision logic. Uses PID control for straight line following.
-- `turn()`: Following a call to `junction_decision()`, the robot performs a 90 degree turn in the direction set by `junction_decision()`, provided that junction type also satisfies the turn. The current state variables are then updated.This checks that the middle sensor is on the line and then exits the function, such that the PID control in `follow_line()` can be followed properly. 
-- `junction_decision()`: Using a 2D vector product between the current and next directions, the function returns a value that when positive indicates a left turn, when negative, a right turn, and when zero straight.
-- `detect_junction()`: Uses the two outer line sensors to detect junctions, updating its current position in the process. The junction type 
-- `follow_line()`:
+- `turn()`: Following a call to `junction_decision()`, the robot performs a 90 degree turn in the direction set by `junction_decision()`, provided that junction type also satisfies the turn. The current state variables are then updated. This checks that the middle sensor (on the side opposite to that of the direction of tha turn) is on the line and then exits the function, such that the PID control in `forward()` is reinitiated. 
+- `junction_decision()`: Using a 2D vector product between the current and next directions, the function returns a value that when positive indicates a left turn, when negative, a right turn, and when zero straight. If the `robot()` is at the end of the `current_route`, the robot stops.
+- `detect_junction()`: Uses the two outer line sensors to detect junctions and the type of junction (`'R', 'L', 'T'`). This is then used to verify the validity of the turn in `turn(junction_type, decision)` and update the position of `current_node`(graphical representation of position) in `forward()`.
+- `follow_line()`: Implements PID control with two line sensor inputs straddling the line to follow the line. 
 - `spin()`:
 - `pickup()`:
 - `drop()`:

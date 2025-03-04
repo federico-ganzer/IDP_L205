@@ -26,8 +26,13 @@ customers = set(['A', 'B', 'C', 'D'])
 def onPress():
     while True:
         agv.forward(75, line_follow= True)
+        
+        if agv.visited_customers == set() and not agv.block and agv.current_node == '3':
+            agv.led.value(1) # Turn on LED when AGV first starts at node 3 this can be changed to when it leaves the box
+            
         if agv.current_node in customers:
             agv.pickup() # spin() included
+        
         if agv.current_node in set(['DP1', 'DP2']):
             agv.drop() # spin() included
             
@@ -42,6 +47,17 @@ def onPress():
             
             agv.current_target = min_customer # current_target is set to closest customer to depot
             agv.current_route = min_path
+            
+        if agv.current_node in set(['DP1', 'DP2']) and agv.visited_customers == customers and not agv.block:
+            agv.current_target = 'START'
+            agv.current_route = dijkstra(agv.current_node, 'START')[0]
+        
+        if agv.visited_customers == customers and agv.current_node == '3' and not agv.block and agv.current_target == 'START':
+            agv.led.value(0) # Turn off LED when AGV reaches node 3 and is ready to go back to START
+            break
+            
+            
+            
             
         
                                

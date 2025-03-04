@@ -23,7 +23,9 @@ agv.current_direction = (0, 1)
 customers = set(['A', 'B', 'C', 'D'])
 
 
-def onPress():
+def main():
+    
+    
     while True:
         agv.forward(75, line_follow= True)
         
@@ -54,8 +56,9 @@ def onPress():
         
         if agv.visited_customers == customers and agv.current_node == '3' and not agv.block and agv.current_target == 'START':
             agv.led.value(0) # Turn off LED when AGV reaches node 3 and is ready to go back to START
+        
+        if agv.current_node == 'START' and agv.current_target == 'START':
             break
-            
             
             
             
@@ -68,6 +71,6 @@ def onPress():
 if __name__ == "__main__":
     while True:
         if agv.button.value() == 1:
-            onPress()
+            main()
             break
     

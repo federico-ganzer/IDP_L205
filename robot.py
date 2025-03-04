@@ -143,8 +143,6 @@ class Robot():
         
         '''
         Turn the robot in the specified direction defined by junction_type and the turn decision
-        
-        This could have been made more consise somehow, however for the sake of readability I have kept it like this
         '''
         
         

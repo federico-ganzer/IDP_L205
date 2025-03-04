@@ -28,7 +28,6 @@
 - `spin()`:
 - `pickup()`:
 - `drop()`:
-- `_get_moving_avg()`: This performs the calculation for the average of the double ended queue's implemented in the `follow_line()` and `turn()` functions. 
 
 ### Pathfinder
 

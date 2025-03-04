@@ -25,9 +25,9 @@
 - `junction_decision()`: Using a 2D vector product between the current and next directions, the function returns a value that when positive indicates a left turn, when negative, a right turn, and when zero straight. If the `robot()` is at the end of the `current_route`, the robot stops.
 - `detect_junction()`: Uses the two outer line sensors to detect junctions and the type of junction (`'R', 'L', 'T'`). This is then used to verify the validity of the turn in `turn(junction_type, decision)` and update the position of `current_node`(graphical representation of position) in `forward()`.
 - `follow_line()`: Implements PID control with two line sensor inputs straddling the line to follow the line. 
-- `spin()`:
-- `pickup()`:
-- `drop()`:
+- `spin()`: performs a spin by 180 degrees. This will check that the configuration of the robot has now been realligned also (to an approximate degree) before the `follow_line()` takes over again. 
+- `pickup()`: 
+- `drop()`: 
 
 ### Pathfinder
  
@@ -44,8 +44,17 @@
 
 ### Motor
 **File:** `motors.py`
-**Description:** Includes one class definition that is used primarily in the `robot.py`, that controls the motor movements. Takes in parameters of the pins. 
+**Description:** Includes two class definitions that are used primarily in the `robot.py`, that controls the motor movements as well as servo movements. 
 
+#### Motor
+Takes parameters of the pins used, and has the following methods (which are self explanatory):
+- `forward()`
+- `reverse()`
+- `stop()`
+#### Servo
+Takes parameters of the pin (singular) used. It has the following parameters (which are again self explanatory):
+- `set_angle`
+- `stop`
 ### other
 - `utils.py`: Contains utility helper functions to check for validity of manouvres.
 

@@ -114,7 +114,7 @@ class VL53L0X():
         self.i2c = i2c
         self.address = address
         utime.sleep_ms(100) # give the I2C time to init
-        self.init()
+        self.init() # BUG:
         self._started = False
         self.measurement_timing_budget_us = 0
         self.set_measurement_timing_budget(self.measurement_timing_budget_us)
@@ -143,7 +143,7 @@ class VL53L0X():
     def _registers(self, register, values=None, struct='B'):
         if values is None:
             size = ustruct.calcsize(struct)
-            data = self.i2c.readfrom_mem(self.address, register, size)
+            data = self.i2c.readfrom_mem(self.address, register, size) #BUG:
             values = ustruct.unpack(struct, data)
             return values
         data = ustruct.pack(struct, *values)
@@ -151,11 +151,11 @@ class VL53L0X():
 
     def _register(self, register, value=None, struct='B'):
         if value is None:
-            return self._registers(register, struct=struct)[0]
+            return self._registers(register, struct=struct)[0] #BUG:
         self._registers(register, (value,), struct=struct)
 
     def _flag(self, register=0x00, bit=0, value=None):
-        data = self._register(register)
+        data = self._register(register) #BUG:
         mask = 1 << bit
         if value is None:
             return bool(data & mask)
@@ -170,7 +170,7 @@ class VL53L0X():
             self._register(register, value)
 
     def init(self, power2v8=True):
-        self._flag(_EXTSUP_HV, 0, power2v8)
+        self._flag(_EXTSUP_HV, 0, power2v8) #BUG:
 
         # I2C standard mode
         self._config(

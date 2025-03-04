@@ -44,8 +44,17 @@
 
 ### Motor
 **File:** `motors.py`
-**Description:** Includes two class definitions that are used primarily in the `robot.py`, that controls the motor movements as well as servo movements. Takes in parameters of the pins. 
+**Description:** Includes two class definitions that are used primarily in the `robot.py`, that controls the motor movements as well as servo movements. 
 
+#### Motor
+Takes parameters of the pins used, and has the following methods (which are self explanatory):
+- `forward()`
+- `reverse()`
+- `stop()`
+#### Servo
+Takes parameters of the pin (singular) used. It has the following parameters (which are again self explanatory):
+- `set_angle`
+- `stop`
 ### other
 - `utils.py`: Contains utility helper functions to check for validity of manouvres.
 

@@ -235,7 +235,6 @@ class Robot():
     
     def pickup(self):
         if utils.check_centering(): # check might not be necessary
-            
             '''
             Go forwards until the robot is right in front of the block
             

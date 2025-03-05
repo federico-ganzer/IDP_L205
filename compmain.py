@@ -18,7 +18,7 @@ phys_params={'axel_width': 1, 'sensor_to_axel': 1, 'wheel_radius': 0.03,
 # Robot class
 agv = Robot(i2c_bus, pins, phys_params) 
 agv.current_target = 'A'
-agv.current_node = 'START' # Test Route from START to A
+agv.current_node = 'BOX' # Test Route from START to A
 agv.current_direction = (0, 1)
 customers = set(['A', 'B', 'C', 'D'])
 
@@ -62,6 +62,8 @@ def main():
             agv.led.value(0) # Turn off LED when AGV reaches node 3 and is ready to go back to START
         
         if agv.current_node == 'START' and agv.current_target == 'START':
+            agv.forward(50,line_follow= False)
+            sleep(2)
             agv.motorL.stop()
             break
             

@@ -2,7 +2,6 @@ from machine import Pin
 from time import sleep
 from sensors.tcs34725 import TCS34725
 from sensors.vl53l0x import VL53L0X
-import utils
 from pathfinder import dijkstra
 from motors import Motor, Servo
 from collections import deque
@@ -38,7 +37,6 @@ class Robot():
         self.sensor_to_axel = phys_params['sensor_to_axel']
         
         self._speed = 100
-        self._end_route = False
         
         #Line following params
         
@@ -102,33 +100,36 @@ class Robot():
         
         '''
         self._speed = speed
-        while not self._end_route:
+        while True:
             junction = self.detect_junction()
             if junction:
                 if self.current_route is not None:
     
+                    '''
+                     call decision
+                     returns "left"[+], "right"[-] or "zero"
+                     remove current node from route
+                    '''
                     decision = self.junction_decision()
                 
                     self.turn(junction, decision)
                     
                     self.current_node = self.current_route.pop(0)
-                
-                # BUG: don't know if i need to do this (if decision == 0 dont turn.)
-                '''
-                 call decision
-                 returns "left"[+], "right"[-] or "zero"
-                 remove current node from route
-                '''
+                    
+                    print(f'Current Node: {self.current_node}')
+                    print(f'Current Route: {self.current_route}')
+                    
+                    if self.current_node == self.current_target:
+                        self.motorL.stop()
+                        self.motorR.stop()
+                        break
 
             if line_follow:
                 self.follow_line()
             else:
                 self.motorR.forward(speed)
                 self.motorL.forward(speed)
-        
-        self.motorL.stop()
-        self.motorR.stop()
-    
+         
     def _get_moving_avg(self, sensor_hist):
         return sum(sensor_hist)/len(sensor_hist)
     
@@ -233,77 +234,68 @@ class Robot():
             self.next_direction = (next_direction_x, next_direction_y)
             return turn
         
-        if self.current_route is None or len(self.current_route) == 0:
+        if self.current_route is []:
             self._end_route = True
-                     
-    
+                        
     def pickup(self):
-        if utils.check_centering(): # check might not be necessary
-            '''
-            Go forwards until the robot is right in front of the block
+    
+        '''
+        Go forwards until the robot is right in front of the block
+        
+        Pick up the block and read colour:
+        1. Use ultrasonic sensor to check if block is in front of robot
+        2. Check alignment
+        4. Turn on colour sensor
+        5. forward (include in main as opposed to here?)
+        6. activate lift
+        Now need to spin
+        then go past the lines
+        then go to back to forward method
+        '''
+        
+        self.motorR.forward(60)
+        self.motorL.forward(60)
+        sleep(0.2)
+        #INFO: code for the distance sensor goes here... depending on the distance sensor data, we can go forwards, until the distance is a certain value. Once this has been done, then it will pick up the block using a servo.
+        
+        # following code was copied from the default given to us
+        budget = self.tof.measurement_timing_budget_us
+        print("Budget was:", budget)
+        self.tof.set_measurement_timing_budget(400000)
+        # Sets the VCSEL (vertical cavity surface emitting laser) pulse period for the 
+        # given period type (VL53L0X::VcselPeriodPreRange or VL53L0X::VcselPeriodFinalRange) 
+        # to the given value (in PCLKs). Longer periods increase the potential range of the sensor. 
+        # Valid values are (even numbers only):
+        # tof.set_Vcsel_pulse_period(tof.vcsel_period_type[0], 18)
+        self.tof.set_Vcsel_pulse_period(self.tof.vcsel_period_type[0], 12)
+        # tof.set_Vcsel_pulse_period(tof.vcsel_period_type[1], 14)
+        self.tof.set_Vcsel_pulse_period(self.tof.vcsel_period_type[1], 8)
+        while True:
+        # Start ranging
+            ping = self.tof.ping()
             
-            Pick up the block and read colour:
-            1. Use ultrasonic sensor to check if block is in front of robot
-            2. Check alignment
-            4. Turn on colour sensor
-            5. forward (include in main as opposed to here?)
-            6. activate lift
-
-            Now need to spin
-            then go past the lines
-            then go to back to forward method
-            '''
-            
-            self.motorR.forward(60)
-            self.motorL.forward(60)
-            sleep(0.2)
-
-            #INFO: code for the distance sensor goes here... depending on the distance sensor data, we can go forwards, until the distance is a certain value. Once this has been done, then it will pick up the block using a servo.
-            
-            # following code was copied from the default given to us
-            budget = self.tof.measurement_timing_budget_us
-            print("Budget was:", budget)
-            self.tof.set_measurement_timing_budget(400000)
-
-            # Sets the VCSEL (vertical cavity surface emitting laser) pulse period for the 
-            # given period type (VL53L0X::VcselPeriodPreRange or VL53L0X::VcselPeriodFinalRange) 
-            # to the given value (in PCLKs). Longer periods increase the potential range of the sensor. 
-            # Valid values are (even numbers only):
-
-            # tof.set_Vcsel_pulse_period(tof.vcsel_period_type[0], 18)
-            self.tof.set_Vcsel_pulse_period(self.tof.vcsel_period_type[0], 12)
-
-            # tof.set_Vcsel_pulse_period(tof.vcsel_period_type[1], 14)
-            self.tof.set_Vcsel_pulse_period(self.tof.vcsel_period_type[1], 8)
-
-            while True:
-            # Start ranging
-                ping = self.tof.ping()
-                
-                if ping is not None:
-                    print(ping - 50, "mm")
-                    if ping - 50 < 10:
-                        break
-            #INFO: servo code... just twist 
-            self.servo1.set_angle(15)
-
-            cct, y = self.tcs.read()
-            if cct is not None:
-                target =  'DP1' if cct < 5000 else 'DP2'
-            else:
-                raise ValueError('Colour not detected')
-            
-            #update state
-            self.current_target = target
-            route = dijkstra(self.current_node, target)
-            if route is not None:
-                self.current_route = route[0] # list of nodes to visit
-            self.block = True
-            self.visited_customers.add(self.current_node)
-            
-            self.spin()
-
-            return target
+            if ping is not None:
+                print(ping - 50, "mm")
+                if ping - 50 < 10:
+                    break
+        #INFO: servo code... just twist 
+        self.servo1.set_angle(15)
+        cct, y = self.tcs.read()
+        if cct is not None:
+            target =  'DP1' if cct < 5000 else 'DP2'
+        else:
+            raise ValueError('Colour not detected')
+        
+        #update state
+        self.current_target = target
+        route = dijkstra(self.current_node, target)
+        if route is not None:
+            self.current_route = route[0] # list of nodes to visit
+        self.block = True
+        self.visited_customers.add(self.current_node)
+        
+        self.spin()
+        return target
     
     def drop(self):
         '''

@@ -3,7 +3,9 @@ import heapq
 
 
  # 'node_id': [(connected_node_id, distance)]
-adj_list = { 'START': [('3', 1.0)],
+adj_list = {'BOX': [('START', 1.0)],
+     
+            'START': [('3', 1.0), ('BOX', 1.0)],
 
             '1': [('DP1', 1.0), ('5', 2.0), ('2', 1.0)],
 

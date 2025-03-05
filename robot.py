@@ -250,6 +250,14 @@ class Robot():
             then go to back to forward method
             '''
             
+            self.motorR.forward(60)
+            self.motorL.forward(60)
+            sleep(0.2)
+
+            #INFO: code for the distance sensor goes here... depending on the distance sensor data, we can go forwards, until the distance is a certain value. Once this has been done, then it will pick up the block using a servo.
+
+            #INFO: servo code... just twist 
+
             cct, y = self.tcs.read()
             if cct is not None:
                 target =  'DP1' if cct < 5000 else 'DP2'

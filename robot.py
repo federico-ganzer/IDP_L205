@@ -277,9 +277,13 @@ class Robot():
             if ping is not None:
                 print(ping - 50, "mm")
                 if ping - 50 < 10:
+                    self.motorR.stop()
+                    self.motorL.stop()
                     break
+
         #INFO: servo code... just twist 
         self.servo1.set_angle(15)
+
         cct, y = self.tcs.read()
         if cct is not None:
             target =  'DP1' if cct < 5000 else 'DP2'

@@ -278,7 +278,9 @@ class Robot():
 
             while True:
             # Start ranging
-                print(self.tof.ping() - 50, "mm")
+                ping = self.tof.ping()
+                if ping is not None:
+                    print(ping - 50, "mm")
             #INFO: servo code... just twist 
 
             cct, y = self.tcs.read()

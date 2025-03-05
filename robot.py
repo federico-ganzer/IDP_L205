@@ -1,6 +1,7 @@
 from machine import Pin
 from time import sleep
 from sensors.tcs34725 import TCS34725
+from sensors.vl53l0x import VL53L0X
 import utils
 from pathfinder import dijkstra
 from motors import Motor, Servo
@@ -9,7 +10,7 @@ from collections import deque
 
 class Robot():
     
-    def __init__(self, i2c_bus, pins, phys_params):
+    def __init__(self, i2c_bus_1, i2c_bus_2, pins, phys_params):
         
         
         # State Variables
@@ -53,7 +54,8 @@ class Robot():
         self.kd = 1
         
         #I2C Sensors
-        self.tcs = TCS34725(i2c_bus) # Colour Sensor
+        self.tcs = TCS34725(i2c_bus_1) # Colour Sensor
+        self.tof = VL53L0X(i2c_bus_2) # ToF sensor
         
         #GPIO Connections
         self.button = Pin(pins['button_pin'], Pin.IN, Pin.PULL_DOWN)
@@ -257,7 +259,26 @@ class Robot():
             sleep(0.2)
 
             #INFO: code for the distance sensor goes here... depending on the distance sensor data, we can go forwards, until the distance is a certain value. Once this has been done, then it will pick up the block using a servo.
+            
+            # following code was copied from the default given to us
+            budget = self.tof.measurement_timing_budget_us
+            print("Budget was:", budget)
+            self.tof.set_measurement_timing_budget(400000)
 
+            # Sets the VCSEL (vertical cavity surface emitting laser) pulse period for the 
+            # given period type (VL53L0X::VcselPeriodPreRange or VL53L0X::VcselPeriodFinalRange) 
+            # to the given value (in PCLKs). Longer periods increase the potential range of the sensor. 
+            # Valid values are (even numbers only):
+
+            # tof.set_Vcsel_pulse_period(tof.vcsel_period_type[0], 18)
+            self.tof.set_Vcsel_pulse_period(self.tof.vcsel_period_type[0], 12)
+
+            # tof.set_Vcsel_pulse_period(tof.vcsel_period_type[1], 14)
+            self.tof.set_Vcsel_pulse_period(self.tof.vcsel_period_type[1], 8)
+
+            while True:
+            # Start ranging
+                print(self.tof.ping() - 50, "mm")
             #INFO: servo code... just twist 
 
             cct, y = self.tcs.read()

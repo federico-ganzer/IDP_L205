@@ -279,9 +279,13 @@ class Robot():
             while True:
             # Start ranging
                 ping = self.tof.ping()
+                
                 if ping is not None:
                     print(ping - 50, "mm")
+                    if ping - 50 < 10:
+                        break
             #INFO: servo code... just twist 
+            self.servo1.set_angle(15)
 
             cct, y = self.tcs.read()
             if cct is not None:
@@ -297,6 +301,8 @@ class Robot():
             self.block = True
             self.visited_customers.add(self.current_node)
             
+            self.spin()
+
             return target
     
     def drop(self):

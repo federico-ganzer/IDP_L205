@@ -41,23 +41,28 @@ def main():
             min_distance = float('inf')
             
             for customer in customers - agv.visited_customers:# Cycle through not visited customers
-                    path, distance = djisktra(agv.current_node, customer)
-                    min_distance = min(min_distance, distance)
-                    if min_distance == distance:
-                        min_path = path
-                        min_customer = customer
+                    result = dijkstra(agv.current_node, customer)
+                    if result is not None:
+                        path, distance = result
+                        min_distance = min(min_distance, distance)
+                        if min_distance == distance:
+                            min_path = path
+                            min_customer = customer
             
             agv.current_target = min_customer # current_target is set to closest customer to depot
             agv.current_route = min_path
             
         if agv.current_node in set(['DP1', 'DP2']) and agv.visited_customers == customers and not agv.block:
             agv.current_target = 'START'
-            agv.current_route = dijkstra(agv.current_node, 'START')[0]
+            route = dijkstra(agv.current_node, 'START')
+            if route is not None:
+                agv.current_route = route[0]
         
         if agv.visited_customers == customers and agv.current_node == '3' and not agv.block and agv.current_target == 'START':
             agv.led.value(0) # Turn off LED when AGV reaches node 3 and is ready to go back to START
         
         if agv.current_node == 'START' and agv.current_target == 'START':
+            agv.motorL.stop()
             break
             
             

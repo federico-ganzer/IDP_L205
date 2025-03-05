@@ -37,7 +37,7 @@ class Robot():
         self.sensor_to_axel = phys_params['sensor_to_axel']
         
         self._speed = 100
-        
+        self._end_route = False
         
         #Line following params
         
@@ -100,7 +100,7 @@ class Robot():
         
         '''
         self._speed = speed
-        while True:
+        while not self._end_route:
             junction = self.detect_junction()
             if junction:
                 if self.current_route is not None:
@@ -123,6 +123,9 @@ class Robot():
             else:
                 self.motorR.forward(speed)
                 self.motorL.forward(speed)
+        
+        self.motorL.stop()
+        self.motorR.stop()
     
     def _get_moving_avg(self, sensor_hist):
         return sum(sensor_hist)/len(sensor_hist)
@@ -229,9 +232,8 @@ class Robot():
             return turn
         
         if self.current_route is None or len(self.current_route) == 0:
-            self.motorL.stop()
-            self.motorR.stop()
-            print("Route Complete")          
+            self._end_route = True
+                     
     
     def pickup(self):
         if utils.check_centering(): # check might not be necessary

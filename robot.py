@@ -15,8 +15,8 @@ class Robot():
         # State Variables
         self.light = False # Boolean for light flashing
         
-        self.current_node = 'START'
-        self.current_target = 'A'
+        self.current_node = ''
+        self.current_target = ''
         
         route = dijkstra(self.current_node, self.current_target)
         self.current_route = route[0] if route is not None else None  # List of nodes to visit
@@ -102,7 +102,7 @@ class Robot():
         self._speed = speed
         while True:
             junction = self.detect_junction()
-            if junction:
+            if junction == 'T' or junction == 'L' or junction == 'R':
                 if self.current_route is not None:
     
                     '''
@@ -112,23 +112,18 @@ class Robot():
                     '''
                     decision = self.junction_decision()
                 
-                    self.turn(junction, decision)
-                    
                     self.current_node = self.current_route.pop(0)
-                    
-                    print(f'Current Node: {self.current_node}')
-                    print(f'Current Route: {self.current_route}')
-                    
+                
                     if self.current_node == self.current_target:
                         self.motorL.stop()
                         self.motorR.stop()
                         break
+                
+                    self.turn(junction, decision)
+                    
 
-            if line_follow:
-                self.follow_line()
-            else:
-                self.motorR.forward(speed)
-                self.motorL.forward(speed)
+            self.follow_line()
+
          
     def _get_moving_avg(self, sensor_hist):
         return sum(sensor_hist)/len(sensor_hist)
@@ -234,8 +229,6 @@ class Robot():
             self.next_direction = (next_direction_x, next_direction_y)
             return turn
         
-        if self.current_route is []:
-            self._end_route = True
                         
     def pickup(self):
     

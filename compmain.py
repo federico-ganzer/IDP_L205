@@ -21,7 +21,6 @@ agv = Robot(i2c_bus_1, i2c_bus_2, pins, phys_params, start= 'BOX', target1= 'A')
  # Test Route from START to A
 customers = set(['A', 'B', 'C', 'D'])
 
-
 def main():
     
     

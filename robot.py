@@ -227,10 +227,18 @@ class Robot():
         2D cross product between direction and the direction of next edge
         '''
 
-        if self.current_route is not None and len(self.current_route) > 2:
+        if self.current_route is not None and len(self.current_route) > 1: # (used to be 2)
+            # if len(self.current_route) == 1, then the next direction does not exist because the next node is the target.
             current_direction_x, current_direction_y = self.current_direction[0], self.current_direction[1]
+            
+            '''
             next_direction_x = self.current_route[2][0] - self.current_route[1][0]
             next_direction_y = self.current_route[2][1] - self.current_route[1][1]
+            '''
+            
+            next_direction_x = self.current_route[1][0] - self.current_route[0][0]
+            next_direction_y = self.current_route[1][1] - self.current_route[0][1]
+        
             turn = current_direction_x * next_direction_y - current_direction_y * next_direction_x
             self.next_direction = (next_direction_x, next_direction_y)
             return turn

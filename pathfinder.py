@@ -89,7 +89,7 @@ def dijkstra(start, end):
                 path.append(node)
                 node = pred[node]
             
-            return ([node_to_coord[node] for node in path[::-1]], current_distance)
+            return ([node_to_coord[node] for node in path[::-1]][1:], current_distance)
         
         for neighbor, distance in adj_list.get(node, []):
             new_distance = current_distance + distance # modification can be made here to include turns
@@ -107,5 +107,5 @@ def convert_coord_to_node(coord):
     return coord_to_node.get(coord, None)
 
 #test
-#print(dijkstra('START', 'D'))
+print(dijkstra('START', 'A'))
 

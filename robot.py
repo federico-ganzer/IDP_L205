@@ -2,21 +2,21 @@ from machine import Pin
 from time import sleep
 from sensors.tcs34725 import TCS34725
 from sensors.vl53l0x import VL53L0X
-from pathfinder import dijkstra
+from pathfinder import dijkstra, convert_coord_to_node
 from motors import Motor, Servo
 from collections import deque
 
 
 class Robot():
     
-    def __init__(self, i2c_bus_1, i2c_bus_2, pins, phys_params):
+    def __init__(self, i2c_bus_1, i2c_bus_2, pins, phys_params, start, target1):
         
         
         # State Variables
         self.light = False # Boolean for light flashing
         
-        self.current_node = ''
-        self.current_target = ''
+        self.current_node = start
+        self.current_target = target1
         
         route = dijkstra(self.current_node, self.current_target)
         self.current_route = route[0] if route is not None else None  # List of nodes to visit
@@ -94,7 +94,7 @@ class Robot():
         else:
             return False # No junction detected
     
-    def forward(self, speed, line_follow= True):
+    def forward(self, speed):
         '''
         Move the robot forward (CURRENTLY MOTOR TEST CODE)
         
@@ -112,7 +112,7 @@ class Robot():
                     '''
                     decision = self.junction_decision()
                 
-                    self.current_node = self.current_route.pop(0)
+                    self.current_node = convert_coord_to_node(self.current_route.pop(0))
                 
                     if self.current_node == self.current_target:
                         self.motorL.stop()
@@ -121,10 +121,8 @@ class Robot():
                 
                     self.turn(junction, decision)
                     
-
             self.follow_line()
-
-         
+       
     def _get_moving_avg(self, sensor_hist):
         return sum(sensor_hist)/len(sensor_hist)
     
@@ -143,7 +141,7 @@ class Robot():
         left_avg = self._get_moving_avg(self.left_sensor_hist)
         right_avg = self._get_moving_avg(self.right_sensor_hist)
         
-        err = left_avg - right_avg
+        err = right_avg - left_avg
         diff = err - self._prev_err
         self._integral += err
         self._prev_err = err
@@ -160,7 +158,7 @@ class Robot():
         '''
         
         
-        if junction_type == 'L' or junction_type == 'T' and decision > 0: #sign must be the same for turn to be valid
+        if (junction_type == 'L' or junction_type == 'T') and decision > 0: #sign must be the same for turn to be valid
             # Moving average of the right sensor
             right_sensor_hist = deque([0]*10, 10)
             right_sensor_avg = self._get_moving_avg(right_sensor_hist)
@@ -181,9 +179,9 @@ class Robot():
             # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
-            self.forward(self._speed, line_follow= True)
+            self.forward(self._speed)
             
-        elif junction_type == 'R' or junction_type == 'T' and decision < 0:
+        elif (junction_type == 'R' or junction_type == 'T') and decision < 0:
 
             # Moving average of the left sensor
             left_sensor_hist = deque([0]*10, 10)
@@ -205,7 +203,7 @@ class Robot():
             # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
-            self.forward(self._speed, line_follow= True)
+            self.forward(self._speed)
 
     def spin(self):
         '''
@@ -228,8 +226,7 @@ class Robot():
             turn = current_direction_x * next_direction_y - current_direction_y * next_direction_x
             self.next_direction = (next_direction_x, next_direction_y)
             return turn
-        
-                        
+                               
     def pickup(self):
     
         '''

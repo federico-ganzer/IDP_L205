@@ -17,10 +17,8 @@ phys_params={'axel_width': 1, 'sensor_to_axel': 1, 'wheel_radius': 0.03,
              'motor_max_speed': 4.18879}
 
 # Robot class
-agv = Robot(i2c_bus_1, i2c_bus_2, pins, phys_params) 
-agv.current_target = 'A'
-agv.current_node = 'BOX' # Test Route from START to A
-agv.current_direction = (0, 1)
+agv = Robot(i2c_bus_1, i2c_bus_2, pins, phys_params, start= 'BOX', target1= 'A') # Start at BOX and go to A
+ # Test Route from START to A
 customers = set(['A', 'B', 'C', 'D'])
 
 
@@ -28,7 +26,7 @@ def main():
     
     
     while True:
-        agv.forward(75, line_follow= True)
+        agv.forward(75)
         
         if agv.visited_customers == set() and not agv.block and agv.current_node == '3':
             agv.led.value(1) # Turn on LED when AGV first starts at node 3 this can be changed to when it leaves the box
@@ -63,7 +61,7 @@ def main():
             agv.led.value(0) # Turn off LED when AGV reaches node 3 and is ready to go back to START
         
         if agv.current_node == 'START' and agv.current_target == 'START':
-            agv.forward(50,line_follow= False)
+            agv.forward(50) # might need to just use motor control directly
             sleep(2)
             agv.motorL.stop()
             break

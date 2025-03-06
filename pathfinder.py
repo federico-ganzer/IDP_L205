@@ -67,6 +67,7 @@ node_to_coord = { 'START': (0, -1),
                   '12': (1, 4),
                   '13' : (2, 4) 
                 }
+coord_to_node = {v: k for k, v in node_to_coord.items()}
 
 def dijkstra(start, end):
     '''
@@ -98,6 +99,13 @@ def dijkstra(start, end):
                 pred[neighbor] = node
                 
     return None
+
+def convert_coord_to_node(coord):
+    '''
+    Converts a coordinate to a node in the graph.
+    '''
+    return coord_to_node.get(coord, None)
+
 #test
 #print(dijkstra('START', 'D'))
 

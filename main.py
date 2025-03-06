@@ -18,14 +18,11 @@ phys_params={'axel_width': 1, 'sensor_to_axel': 1, 'wheel_radius': 0.03,
              'motor_max_speed': 4.18879}
 
 # Robot class
-agv = Robot(i2c_bus_1, i2c_bus_2, pins, phys_params) 
-agv.current_target = 'A'
-agv.current_node = 'START' # Test Route from START to A
-agv.current_direction = (0, 1)
+agv = Robot(i2c_bus_1, i2c_bus_2, pins, phys_params, 'START', 'A') 
 
 def onPress():
     print("Pressed")
-    agv.forward(75, line_follow= True)
+    agv.forward(75)
 
 while True:
     if agv.button.value() == 1:

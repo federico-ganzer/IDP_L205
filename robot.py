@@ -100,9 +100,11 @@ class Robot():
         
         '''
         self._speed = speed
+        
         while True:
             junction = self.detect_junction()
             if junction == 'T' or junction == 'L' or junction == 'R':
+                
                 if self.current_route is not None:
     
                     '''
@@ -110,18 +112,22 @@ class Robot():
                      returns "left"[+], "right"[-] or "zero"
                      remove current node from route
                     '''
+                    
                     decision = self.junction_decision()
-                
-                    self.current_node = convert_coord_to_node(self.current_route.pop(0))
-                
-                    if self.current_node == self.current_target:
-                        self.motorL.stop()
-                        self.motorR.stop()
+                    
+                    if decision is False: # end of route
+                        self.current_node = convert_coord_to_node(self.current_route.pop(0)) # update current node
                         break
-                
+                    
                     self.turn(junction, decision)
+                    self.current_node = convert_coord_to_node(self.current_route.pop(0)) # update current node
+                
                     
             self.follow_line()
+        
+        self.motorL.stop()
+        self.motorR.stop()
+        
        
     def _get_moving_avg(self, sensor_hist):
         return sum(sensor_hist)/len(sensor_hist)
@@ -179,7 +185,8 @@ class Robot():
             # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
-            self.forward(self._speed)
+            self.motorR.forward(self._speed)
+            self.motorL.forward(self._speed)
             
         elif (junction_type == 'R' or junction_type == 'T') and decision < 0:
 
@@ -203,7 +210,8 @@ class Robot():
             # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
-            self.forward(self._speed)
+            self.motorR.forward(self._speed)
+            self.motorL.forward(self._speed)
 
     def spin(self):
         '''
@@ -218,14 +226,16 @@ class Robot():
         '''
         2D cross product between direction and the direction of next edge
         '''
-        if self.current_route is not None:
-            
+
+        if self.current_route is not None and len(self.current_route) > 2:
             current_direction_x, current_direction_y = self.current_direction[0], self.current_direction[1]
             next_direction_x = self.current_route[2][0] - self.current_route[1][0]
             next_direction_y = self.current_route[2][1] - self.current_route[1][1]
             turn = current_direction_x * next_direction_y - current_direction_y * next_direction_x
             self.next_direction = (next_direction_x, next_direction_y)
             return turn
+        else: # next direction does not exist
+            return False
                                
     def pickup(self):
     
@@ -299,4 +309,14 @@ class Robot():
             self.block = False
             self.spin()
             pass
-            
+
+'''
+TODO:
+- Problem: current_node appearance in current_route and indexing in junction decision is causing problems
+           for decisions.
+- Check popping of nodes, sit through and manually go through the code.
+
+
+- Problem: the popping of nodes for current node (caused outer line sensor detection)
+- Solution: Move junction decision logic and node updates from forward method to turn method
+'''

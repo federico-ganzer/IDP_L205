@@ -247,7 +247,7 @@ class Robot():
         self.motorL.forward(60)
         sleep(0.2)
         #INFO: code for the distance sensor goes here... depending on the distance sensor data, we can go forwards, until the distance is a certain value. Once this has been done, then it will pick up the block using a servo.
-        
+        # We might not need to use this ToF sensor, if the line sensing is good enough
         # following code was copied from the default given to us
         budget = self.tof.measurement_timing_budget_us
         print("Budget was:", budget)

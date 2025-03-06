@@ -33,7 +33,7 @@ class Robot():
         
         #time required to turn 90 degrees (with only one wheel active) = time required to turn 180 degrees with 2 wheels active
         self.turning_time = (3.14159*phys_params['axel_width'])/(2*phys_params['motor_max_speed']*phys_params['wheel_radius'])
-        self.turning_prep_time = 0.5
+        self.turning_prep_time = 0.65 # time required to move forward slightly before turning
         self.sensor_to_axel = phys_params['sensor_to_axel']
         
         self._speed = 100
@@ -168,12 +168,12 @@ class Robot():
             sleep(self.turning_prep_time) # consider changing to a function of speed
             # starts turning without the check 
             self.motorR.forward(80)
-            self.motorL.reverse(40)
+            self.motorL.reverse(80)
             sleep(0.5)
 
             while right_sensor_avg < 0.8:
                 self.motorR.forward(80)
-                self.motorL.reverse(40)
+                self.motorL.reverse(80)
                 right_sensor_hist.append(self.line_sensorR.value())
                 right_sensor_avg = self._get_moving_avg(right_sensor_hist)
             # update state once turn is complete
@@ -191,12 +191,12 @@ class Robot():
             self.motorL.forward(80)
             sleep(self.turning_prep_time)
             # starts turning without the check
-            self.motorR.reverse(40)
+            self.motorR.reverse(80)
             self.motorL.forward(80)
             sleep(0.5)
 
             while left_sensor_avg < 0.8:
-                self.motorR.reverse(40)
+                self.motorR.reverse(80)
                 self.motorL.forward(80)
                 left_sensor_hist.append(self.line_sensorL.value())
                 left_sensor_avg = self._get_moving_avg(left_sensor_hist)

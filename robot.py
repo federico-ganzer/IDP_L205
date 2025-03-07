@@ -223,11 +223,6 @@ class Robot():
             # if len(self.current_route) == 1, then the next direction does not exist because the next node is the target.
             current_direction_x, current_direction_y = self.current_direction[0], self.current_direction[1]
             
-            '''
-            next_direction_x = self.current_route[2][0] - self.current_route[1][0]
-            next_direction_y = self.current_route[2][1] - self.current_route[1][1]
-            '''
-            
             next_direction_x = self.current_route[1][0] - self.current_route[0][0]
             next_direction_y = self.current_route[1][1] - self.current_route[0][1]
         
@@ -313,4 +308,43 @@ class Robot():
 '''
 TODO:
 - Junction detection: updating of current_nodes during / after a turn
+'''
+'''
+OUTPUT:
+pressed
+. 
+
+Current route:[(0, 0), (2, 0), (2, 2), (1, 4), (1, 3)]
+decision: -2
+current direction: (0, 1)
+next direction: (2, 0)
+current node:3
+. 
+
+Current route:[(2, 0), (2, 2), (1, 4), (1, 3)]
+decision: 4
+current direction: (2, 0)
+next direction: (0, 2)
+current node:4
+. 
+
+Current route:[(2, 2), (1, 4), (1, 3)]
+decision: 2
+current direction: (0, 2)
+next direction: (-1, 2)
+current node:8
+. 
+
+Current route:[(1, 4), (1, 3)]
+decision: 1
+current direction: (-1, 2)
+next direction: (0, -1)
+current node:12
+. 
+
+Current route:[(1, 3)]
+decision: False
+current direction: (0, -1)
+next direction: (0, -1)
+
 '''

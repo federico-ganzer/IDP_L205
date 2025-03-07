@@ -85,12 +85,8 @@ class Robot():
         outer_left_avg = self._get_moving_avg(self.left_outer_sensor_hist)
         outer_right_avg = self._get_moving_avg(self.right_outer_sensor_hist)
 
-        if outer_left_avg > 0.8 and outer_right_avg > 0.8:
-            return 'T'
-        elif outer_left_avg > 0.8:
-            return 'L'
-        elif outer_right_avg > 0.8:
-            return 'R'
+        if outer_left_avg > 0.8 or outer_right_avg > 0.8:
+            return "junc"
         else:
             return False # No junction detected
     
@@ -103,8 +99,7 @@ class Robot():
         
         while True:
             junction = self.detect_junction()
-            if junction == 'T' or junction == 'L' or junction == 'R':
-                
+            if junction == "junc":
                 if self.current_route is not None:
     
                     '''
@@ -123,7 +118,6 @@ class Robot():
                     junction = False
                     
                     self.current_node = convert_coord_to_node(self.current_route.pop(0)) # update current node
-                
                     
             self.follow_line()
         
@@ -166,7 +160,7 @@ class Robot():
         '''
         
         
-        if (junction_type == 'L' or junction_type == 'T') and decision > 0: #sign must be the same for turn to be valid
+        if decision > 0: #sign must be the same for turn to be valid
             # Moving average of the right sensor
             right_sensor_hist = deque([0]*10, 10)
             right_sensor_avg = self._get_moving_avg(right_sensor_hist)
@@ -187,10 +181,8 @@ class Robot():
             # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
-            self.motorR.forward(self._speed)
-            self.motorL.forward(self._speed)
             
-        elif (junction_type == 'R' or junction_type == 'T') and decision < 0:
+        elif decision < 0:
 
             # Moving average of the left sensor
             left_sensor_hist = deque([0]*10, 10)
@@ -212,9 +204,7 @@ class Robot():
             # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
-            self.motorR.forward(self._speed)
-            self.motorL.forward(self._speed)
-
+            
     def spin(self):
         '''
         Backout the robot until the sensors line up with the line again

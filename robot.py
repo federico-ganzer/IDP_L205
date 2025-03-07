@@ -120,6 +120,8 @@ class Robot():
                         break
                     
                     self.turn(junction, decision)
+                    junction = False
+                    
                     self.current_node = convert_coord_to_node(self.current_route.pop(0)) # update current node
                 
                     
@@ -320,11 +322,5 @@ class Robot():
 
 '''
 TODO:
-- Problem: current_node appearance in current_route and indexing in junction decision is causing problems
-           for decisions.
-- Check popping of nodes, sit through and manually go through the code.
-
-
-- Problem: the popping of nodes for current node (caused outer line sensor detection)
-- Solution: Move junction decision logic and node updates from forward method to turn method
+- Junction detection: updating of current_nodes during / after a turn
 '''

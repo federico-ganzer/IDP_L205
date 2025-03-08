@@ -153,8 +153,7 @@ class Robot():
         self.motorR.forward(100 - correction)
         self.motorL.forward(100 + correction)
        
-    def turn(self, junction_type, decision):
-        
+    def turn(self, junction_type, decision): # NOTE: to self, junction_type is not accessed 
         '''
         Turn the robot in the specified direction defined by junction_type and the turn decision
         '''
@@ -281,20 +280,20 @@ class Robot():
 
         cct, y = self.tcs.read()
         if cct is not None:
-            target =  'DP1' if cct < 5000 else 'DP2'
+            self.target =  'DP1' if cct < 5000 else 'DP2'
         else:
+            self.target = 'DP1' # just so it goes to a depot.. doesn't matter which one
             raise ValueError('Colour not detected')
         
         #update state
-        self.current_target = target
-        route = dijkstra(self.current_node, target)
+        route = dijkstra(self.current_node, self.target)
         if route is not None:
             self.current_route = route[0] # list of nodes to visit
         self.block = True
         self.visited_customers.add(self.current_node)
         
         self.spin()
-        return target
+        return self.target
     
     def drop(self):
         '''
@@ -308,43 +307,4 @@ class Robot():
 '''
 TODO:
 - Junction detection: updating of current_nodes during / after a turn
-'''
-'''
-OUTPUT:
-pressed
-. 
-
-Current route:[(0, 0), (2, 0), (2, 2), (1, 4), (1, 3)]
-decision: -2
-current direction: (0, 1)
-next direction: (2, 0)
-current node:3
-. 
-
-Current route:[(2, 0), (2, 2), (1, 4), (1, 3)]
-decision: 4
-current direction: (2, 0)
-next direction: (0, 2)
-current node:4
-. 
-
-Current route:[(2, 2), (1, 4), (1, 3)]
-decision: 2
-current direction: (0, 2)
-next direction: (-1, 2)
-current node:8
-. 
-
-Current route:[(1, 4), (1, 3)]
-decision: 1
-current direction: (-1, 2)
-next direction: (0, -1)
-current node:12
-. 
-
-Current route:[(1, 3)]
-decision: False
-current direction: (0, -1)
-next direction: (0, -1)
-
 '''

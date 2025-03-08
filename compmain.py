@@ -62,15 +62,13 @@ def main():
             agv.forward(50) # might need to just use motor control directly
             sleep(2)
             agv.motorL.stop()
+            agv.motorR.stop()
             break
             
             
             
         
                                
-
-
-
 
 if __name__ == "__main__":
     while True:

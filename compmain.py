@@ -23,7 +23,6 @@ customers = set(['A', 'B', 'C', 'D'])
 
 def main():
     
-    
     while True:
         agv.forward(75)
         

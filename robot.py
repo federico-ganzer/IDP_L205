@@ -121,8 +121,6 @@ class Robot():
         
         self.motorL.stop()
         self.motorR.stop()
-        return
-        
        
     def _get_moving_avg(self, sensor_hist):
         return sum(sensor_hist)/len(sensor_hist)
@@ -209,6 +207,8 @@ class Robot():
         Backout the robot until the sensors line up with the line again
         '''
         # BUG: Need to check if this is the right way around
+
+
         if direction > 0:
             self.motorR.forward(speed)
             self.motorL.reverse(speed)
@@ -217,6 +217,20 @@ class Robot():
             self.motorL.forward(speed)
         sleep(self.turning_time)
         pass
+
+    def back_out(self, speed, node):
+        time_for_reverse = {
+            "A": 2,
+            "B": 2, 
+            "C": 2,
+            "D": 1,
+            "DP1": 2,
+            "DP2": 2
+        }
+
+        self.motorL.reverse(speed)
+        self.motorR.reverse(speed)
+        sleep(time_for_reverse[node])
     
     def junction_decision(self):
         '''
@@ -280,13 +294,8 @@ class Robot():
                     self.motorL.stop()
                     break
         '''
-        time_for_reverse = {
-            "A": 2,
-            "B": 2, 
-            "C": 2,
-            "D": 2
-        }
-        #INFO: servo code... just twist 
+        
+        # servo twisting 
         self.servo1.set_angle(15)
 
         cct, y = self.tcs.read()
@@ -303,9 +312,7 @@ class Robot():
         self.block = True
         self.visited_customers.add(self.current_node)
 
-        self.motorR.reverse(80)
-        self.motorL.reverse(80)
-        sleep(time_for_reverse[current_pickup_point]) # or some arbitrary function
+        self.back_out(80, self.current_node)
 
         direction = None # BUG: HELP ME PLS FEDERICO
         self.spin(80, direction)
@@ -320,7 +327,11 @@ class Robot():
             self.block = False
             direction = None # BUG: HELP ME PLS
             self.spin(80, direction)
-            pass
+            # update route after the block has been dropped
+            route = dijkstra(self.current_node, self.target)
+            if route is not None:
+                self.current_route = route[0] # list of nodes to visit
+
 
 '''
 TODO:

@@ -24,7 +24,7 @@ customers = set(['A', 'B', 'C', 'D'])
 def main():
     
     while True:
-        agv.forward(75)
+        agv.forward(75) # TODO: need to put in an exit path within the forward program for this to function properly
         
         if agv.visited_customers == set() and not agv.block and agv.current_node == '3':
             agv.led.value(1) # Turn on LED when AGV first starts at node 3 this can be changed to when it leaves the box

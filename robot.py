@@ -300,6 +300,7 @@ class Robot():
         Drop the block
         '''
         if self.current_node in set(['DP1', 'DP2']) and self.block:
+            self.servo1.set_angle(0)
             self.block = False
             self.spin()
             pass

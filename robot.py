@@ -221,7 +221,7 @@ class Robot():
     def back_out(self, speed, node):
         time_for_reverse = {
             "A": 2,
-            "B": 2, 
+            "B": 2,
             "C": 2,
             "D": 1,
             "DP1": 2,
@@ -316,6 +316,7 @@ class Robot():
 
         direction = None # BUG: HELP ME PLS FEDERICO
         self.spin(80, direction)
+
         return self.target
     
     def drop(self):

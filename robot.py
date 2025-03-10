@@ -236,7 +236,7 @@ class Robot():
         else: # next direction does not exist
             return False
                                
-    def pickup(self):
+    def pickup(self, current_pickup_point):
         '''
         Go forwards until the robot is right in front of the block
         
@@ -249,6 +249,7 @@ class Robot():
         Now need to spin
         then go past the lines
         then go to back to forward method
+        '''
         '''
         # Actual pick up of the block
         self.motorR.forward(60)
@@ -278,24 +279,34 @@ class Robot():
                     self.motorR.stop()
                     self.motorL.stop()
                     break
-
+        '''
+        time_for_reverse = {
+            "A": 2,
+            "B": 2, 
+            "C": 2,
+            "D": 2
+        }
         #INFO: servo code... just twist 
         self.servo1.set_angle(15)
 
         cct, y = self.tcs.read()
         if cct is not None:
             self.target =  'DP1' if cct < 5000 else 'DP2'
-        else:
-            self.target = 'DP1' # just so it goes to a depot.. doesn't matter which one
+        else: # just so it goes to a depot.. doesn't matter which one
+            self.target = 'DP1' 
             raise ValueError('Colour not detected')
         
-        #update state
+        # update state
         route = dijkstra(self.current_node, self.target)
         if route is not None:
             self.current_route = route[0] # list of nodes to visit
         self.block = True
         self.visited_customers.add(self.current_node)
-        
+
+        self.motorR.reverse(80)
+        self.motorL.reverse(80)
+        sleep(time_for_reverse[current_pickup_point]) # or some arbitrary function
+
         direction = None # BUG: HELP ME PLS FEDERICO
         self.spin(80, direction)
         return self.target

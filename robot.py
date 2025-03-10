@@ -92,7 +92,6 @@ class Robot():
     def forward(self, speed):
         '''
         Move the robot forward (CURRENTLY MOTOR TEST CODE)
-        
         '''
         self._speed = speed
         
@@ -122,6 +121,7 @@ class Robot():
         
         self.motorL.stop()
         self.motorR.stop()
+        return
         
        
     def _get_moving_avg(self, sensor_hist):

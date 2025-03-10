@@ -30,7 +30,7 @@ def main():
             agv.led.value(1) # Turn on LED when AGV first starts at node 3 this can be changed to when it leaves the box
             
         if agv.current_node in customers:
-            agv.pickup() # spin() included
+            agv.pickup(agv.current_node) # spin() included. Takes in paramters of 'current_pickup_point'
         
         if agv.current_node in set(['DP1', 'DP2']):
             agv.drop() # spin() included

@@ -113,7 +113,7 @@ class Robot():
                         self.current_node = convert_coord_to_node(self.current_route.pop(0)) # update current node
                         break
                     
-                    self.turn(junction, decision)
+                    self.turn(decision)
                     junction = False
                     
                     self.current_node = convert_coord_to_node(self.current_route.pop(0)) # update current node
@@ -152,11 +152,10 @@ class Robot():
         self.motorR.forward(100 - correction)
         self.motorL.forward(100 + correction)
        
-    def turn(self, junction_type, decision): # NOTE: to self, junction_type is not accessed 
+    def turn(self, decision): # NOTE: to self, junction_type is not accessed 
         '''
         Turn the robot in the specified direction defined by junction_type and the turn decision
         '''
-        
         
         if decision > 0: # left turn
             self._detect_junction = False
@@ -203,14 +202,19 @@ class Robot():
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
         elif decision == 0: # straight
-            sleep(self.turning_prep_time)
+            sleep(self.turning_prep_time) # just so it doesn't detect multiple straight junctions in one whilst going straight
             
-    def spin(self):
+    def spin(self, speed, direction):
         '''
         Backout the robot until the sensors line up with the line again
         '''
-        self.motorR.forward(100)
-        self.motorL.reverse(100)
+        # BUG: Need to check if this is the right way around
+        if direction > 0:
+            self.motorR.forward(speed)
+            self.motorL.reverse(speed)
+        elif direction < 0:
+            self.motorR.reverse(speed)
+            self.motorL.forward(speed)
         sleep(self.turning_time)
         pass
     
@@ -233,7 +237,6 @@ class Robot():
             return False
                                
     def pickup(self):
-    
         '''
         Go forwards until the robot is right in front of the block
         
@@ -247,11 +250,11 @@ class Robot():
         then go past the lines
         then go to back to forward method
         '''
-        
+        # Actual pick up of the block
         self.motorR.forward(60)
         self.motorL.forward(60)
         sleep(0.2)
-        #INFO: code for the distance sensor goes here... depending on the distance sensor data, we can go forwards, until the distance is a certain value. Once this has been done, then it will pick up the block using a servo.
+        # INFO: code for the distance sensor goes here... depending on the distance sensor data, we can go forwards, until the distance is a certain value. Once this has been done, then it will pick up the block using a servo.
         # We might not need to use this ToF sensor, if the line sensing is good enough
         # following code was copied from the default given to us
         budget = self.tof.measurement_timing_budget_us
@@ -293,7 +296,8 @@ class Robot():
         self.block = True
         self.visited_customers.add(self.current_node)
         
-        self.spin()
+        direction = None # BUG: HELP ME PLS FEDERICO
+        self.spin(80, direction)
         return self.target
     
     def drop(self):
@@ -303,7 +307,8 @@ class Robot():
         if self.current_node in set(['DP1', 'DP2']) and self.block:
             self.servo1.set_angle(0)
             self.block = False
-            self.spin()
+            direction = None # BUG: HELP ME PLS
+            self.spin(80, direction)
             pass
 
 '''

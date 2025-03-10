@@ -14,7 +14,6 @@ class Robot():
         
         # State Variables
         self.light = False # Boolean for light flashing
-        
         self.current_node = start
         self.current_target = target1
         
@@ -47,9 +46,9 @@ class Robot():
         self.right_outer_sensor_hist = deque([0]*self._window_size, self._window_size)
         self._prev_err = 0
         self._integral = 0
-        self.kp = 20
-        self.ki = 0.05
-        self.kd = 1
+        self.kp = 40
+        self.ki = 0.03
+        self.kd = 3
         
         #I2C Sensors
         self.tcs = TCS34725(i2c_bus_1) # Colour Sensor
@@ -93,7 +92,6 @@ class Robot():
     def forward(self, speed):
         '''
         Move the robot forward (CURRENTLY MOTOR TEST CODE)
-        
         '''
         self._speed = speed
         
@@ -114,7 +112,7 @@ class Robot():
                         self.current_node = convert_coord_to_node(self.current_route.pop(0)) # update current node
                         break
                     
-                    self.turn(junction, decision)
+                    self.turn(decision)
                     junction = False
                     
                     self.current_node = convert_coord_to_node(self.current_route.pop(0)) # update current node
@@ -123,7 +121,6 @@ class Robot():
         
         self.motorL.stop()
         self.motorR.stop()
-        
        
     def _get_moving_avg(self, sensor_hist):
         return sum(sensor_hist)/len(sensor_hist)
@@ -153,13 +150,13 @@ class Robot():
         self.motorR.forward(100 - correction)
         self.motorL.forward(100 + correction)
        
-    def turn(self, junction_type, decision): # NOTE: to self, junction_type is not accessed 
+    def turn(self, decision): # NOTE: to self, junction_type is not accessed 
         '''
         Turn the robot in the specified direction defined by junction_type and the turn decision
         '''
         
-        
-        if decision > 0: #sign must be the same for turn to be valid
+        if decision > 0: # left turn
+            self._detect_junction = False
             # Moving average of the right sensor
             right_sensor_hist = deque([0]*10, 10)
             right_sensor_avg = self._get_moving_avg(right_sensor_hist)
@@ -180,9 +177,8 @@ class Robot():
             # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
-            
-        elif decision < 0:
-
+        elif decision < 0: # right turn
+            self._detect_junction = False
             # Moving average of the left sensor
             left_sensor_hist = deque([0]*10, 10)
             left_sensor_avg = self._get_moving_avg(left_sensor_hist)
@@ -203,15 +199,38 @@ class Robot():
             # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
+        elif decision == 0: # straight
+            sleep(self.turning_prep_time) # just so it doesn't detect multiple straight junctions in one whilst going straight
             
-    def spin(self):
+    def spin(self, speed, direction):
         '''
         Backout the robot until the sensors line up with the line again
         '''
-        self.motorR.forward(100)
-        self.motorL.reverse(100)
+        # BUG: Need to check if this is the right way around
+
+
+        if direction > 0:
+            self.motorR.forward(speed)
+            self.motorL.reverse(speed)
+        elif direction < 0:
+            self.motorR.reverse(speed)
+            self.motorL.forward(speed)
         sleep(self.turning_time)
         pass
+
+    def back_out(self, speed, node):
+        time_for_reverse = {
+            "A": 2,
+            "B": 2,
+            "C": 2,
+            "D": 1,
+            "DP1": 2,
+            "DP2": 2
+        }
+
+        self.motorL.reverse(speed)
+        self.motorR.reverse(speed)
+        sleep(time_for_reverse[node])
     
     def junction_decision(self):
         '''
@@ -231,8 +250,7 @@ class Robot():
         else: # next direction does not exist
             return False
                                
-    def pickup(self):
-    
+    def pickup(self, current_pickup_point):
         '''
         Go forwards until the robot is right in front of the block
         
@@ -246,11 +264,12 @@ class Robot():
         then go past the lines
         then go to back to forward method
         '''
-        
+        '''
+        # Actual pick up of the block
         self.motorR.forward(60)
         self.motorL.forward(60)
         sleep(0.2)
-        #INFO: code for the distance sensor goes here... depending on the distance sensor data, we can go forwards, until the distance is a certain value. Once this has been done, then it will pick up the block using a servo.
+        # INFO: code for the distance sensor goes here... depending on the distance sensor data, we can go forwards, until the distance is a certain value. Once this has been done, then it will pick up the block using a servo.
         # We might not need to use this ToF sensor, if the line sensing is good enough
         # following code was copied from the default given to us
         budget = self.tof.measurement_timing_budget_us
@@ -274,25 +293,30 @@ class Robot():
                     self.motorR.stop()
                     self.motorL.stop()
                     break
-
-        #INFO: servo code... just twist 
+        '''
+        
+        # servo twisting 
         self.servo1.set_angle(15)
 
         cct, y = self.tcs.read()
         if cct is not None:
             self.target =  'DP1' if cct < 5000 else 'DP2'
-        else:
-            self.target = 'DP1' # just so it goes to a depot.. doesn't matter which one
+        else: # just so it goes to a depot.. doesn't matter which one
+            self.target = 'DP1' 
             raise ValueError('Colour not detected')
         
-        #update state
+        # update state
         route = dijkstra(self.current_node, self.target)
         if route is not None:
             self.current_route = route[0] # list of nodes to visit
         self.block = True
         self.visited_customers.add(self.current_node)
-        
-        self.spin()
+
+        self.back_out(80, self.current_node)
+
+        direction = None # BUG: HELP ME PLS FEDERICO
+        self.spin(80, direction)
+
         return self.target
     
     def drop(self):
@@ -300,9 +324,15 @@ class Robot():
         Drop the block
         '''
         if self.current_node in set(['DP1', 'DP2']) and self.block:
+            self.servo1.set_angle(0)
             self.block = False
-            self.spin()
-            pass
+            direction = None # BUG: HELP ME PLS
+            self.spin(80, direction)
+            # update route after the block has been dropped
+            route = dijkstra(self.current_node, self.target)
+            if route is not None:
+                self.current_route = route[0] # list of nodes to visit
+
 
 '''
 TODO:

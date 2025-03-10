@@ -14,7 +14,6 @@ class Robot():
         
         # State Variables
         self.light = False # Boolean for light flashing
-        
         self.current_node = start
         self.current_target = target1
         
@@ -47,9 +46,9 @@ class Robot():
         self.right_outer_sensor_hist = deque([0]*self._window_size, self._window_size)
         self._prev_err = 0
         self._integral = 0
-        self.kp = 20
-        self.ki = 0.05
-        self.kd = 1
+        self.kp = 40
+        self.ki = 0.03
+        self.kd = 3
         
         #I2C Sensors
         self.tcs = TCS34725(i2c_bus_1) # Colour Sensor
@@ -159,7 +158,8 @@ class Robot():
         '''
         
         
-        if decision > 0: #sign must be the same for turn to be valid
+        if decision > 0: # left turn
+            self._detect_junction = False
             # Moving average of the right sensor
             right_sensor_hist = deque([0]*10, 10)
             right_sensor_avg = self._get_moving_avg(right_sensor_hist)
@@ -180,9 +180,8 @@ class Robot():
             # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
-            
-        elif decision < 0:
-
+        elif decision < 0: # right turn
+            self._detect_junction = False
             # Moving average of the left sensor
             left_sensor_hist = deque([0]*10, 10)
             left_sensor_avg = self._get_moving_avg(left_sensor_hist)
@@ -203,6 +202,8 @@ class Robot():
             # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
+        elif decision == 0: # straight
+            sleep(self.turning_prep_time)
             
     def spin(self):
         '''

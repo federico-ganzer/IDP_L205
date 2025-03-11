@@ -347,13 +347,13 @@ class Robot():
 
         cct, y = self.tcs.read()
         if cct is not None:
-            self.target =  'DP1' if cct < 5000 else 'DP2'
+            self.current_target =  'DP1' if cct < 5000 else 'DP2'
         else: # just so it goes to a depot.. doesn't matter which one
-            self.target = 'DP1' 
+            self.current_target = 'DP1' 
             raise ValueError('Colour not detected')
         
         # update state
-        route = dijkstra(self.current_node, self.target)
+        route = dijkstra(self.current_node, self.current_target)
         if route is not None:
             
             self.current_route = route[0] # list of nodes to visit

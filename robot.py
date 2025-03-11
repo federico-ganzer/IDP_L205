@@ -308,14 +308,19 @@ class Robot():
         # update state
         route = dijkstra(self.current_node, self.target)
         if route is not None:
+            
             self.current_route = route[0] # list of nodes to visit
-        self.block = True
-        self.visited_customers.add(self.current_node)
+            self.block = True
+            self.visited_customers.add(self.current_node)
 
-        self.back_out(80, self.current_node)
+            self.back_out(80, self.current_node)
 
-        direction = None # BUG: HELP ME PLS FEDERICO
-        self.spin(80, direction)
+            direction = self.junction_decision()
+
+            #self.spin(80, direction)
+            self.turn(direction, with_prep= False)
+
+            self.current_node = convert_coord_to_node(self.current_route.pop(0))
 
         return self.target
     
@@ -326,12 +331,12 @@ class Robot():
         if self.current_node in set(['DP1', 'DP2']) and self.block:
             self.servo1.set_angle(0)
             self.block = False
-            direction = None # BUG: HELP ME PLS
+            
+            direction = None # set spin direction such that it turns towards inside
+            
             self.spin(80, direction)
             # update route after the block has been dropped
-            route = dijkstra(self.current_node, self.target)
-            if route is not None:
-                self.current_route = route[0] # list of nodes to visit
+
 
 
 '''

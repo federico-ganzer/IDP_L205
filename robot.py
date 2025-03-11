@@ -150,7 +150,7 @@ class Robot():
         self.motorR.forward(100 - correction)
         self.motorL.forward(100 + correction)
        
-    def turn(self, decision): # NOTE: to self, junction_type is not accessed 
+    def turn(self, decision, with_prep = True): # NOTE: to self, junction_type is not accessed 
         '''
         Turn the robot in the specified direction defined by junction_type and the turn decision
         '''
@@ -161,9 +161,10 @@ class Robot():
             right_sensor_hist = deque([0]*10, 10)
             right_sensor_avg = self._get_moving_avg(right_sensor_hist)
             # moves forward slightly to allow room for turning
-            self.motorR.forward(80)
-            self.motorL.forward(80)
-            sleep(self.turning_prep_time) # consider changing to a function of speed
+            if with_prep:
+                self.motorR.forward(80)
+                self.motorL.forward(80)
+                sleep(self.turning_prep_time) # consider changing to a function of speed
             # starts turning without the check 
             self.motorR.forward(80)
             self.motorL.reverse(80)
@@ -183,9 +184,10 @@ class Robot():
             left_sensor_hist = deque([0]*10, 10)
             left_sensor_avg = self._get_moving_avg(left_sensor_hist)
             # moves forward slightly to allow room for turning
-            self.motorR.forward(80)
-            self.motorL.forward(80)
-            sleep(self.turning_prep_time)
+            if with_prep:
+                self.motorR.forward(80)
+                self.motorL.forward(80)
+                sleep(self.turning_prep_time)
             # starts turning without the check
             self.motorR.reverse(80)
             self.motorL.forward(80)

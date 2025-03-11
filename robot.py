@@ -297,7 +297,7 @@ class Robot():
         else: # next direction does not exist
             return False
                                
-    def pickup(self, current_pickup_point):
+    def pickup(self):
         '''
         Go forwards until the robot is right in front of the block
         
@@ -385,9 +385,7 @@ class Robot():
         # update route after the block has been dropped
         
 
-
-
 '''
 TODO:
-- Junction detection: updating of current_nodes during / after a turn
+- Test compmain.py
 '''

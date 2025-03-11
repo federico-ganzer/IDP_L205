@@ -24,14 +24,15 @@ customers = set(['A', 'B', 'C', 'D'])
 def main():
     
     while True:
-        agv.forward(75) # TODO: need to put in an exit path within the forward program for this to function properly
+        
+        agv.forward(100) # TODO: need to put in an exit path within the forward program for this to function properly
         
         if agv.visited_customers == set() and not agv.block and agv.current_node == '3':
             agv.led.value(1) # Turn on LED when AGV first starts at node 3 this can be changed to when it leaves the box
             
         if agv.current_node in customers:
             agv.pickup(agv.current_node) # spin() included. Takes in paramters of 'current_pickup_point'
-        
+              
         if agv.current_node in set(['DP1', 'DP2']):
             agv.drop() # spin() included
             
@@ -54,7 +55,7 @@ def main():
             route = dijkstra(agv.current_node, 'START')
             if route is not None:
                 agv.current_route = route[0]
-        
+            
         if agv.visited_customers == customers and agv.current_node == '3' and not agv.block and agv.current_target == 'START':
             agv.led.value(0) # Turn off LED when AGV reaches node 3 and is ready to go back to START
         

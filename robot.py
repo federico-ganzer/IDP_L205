@@ -96,6 +96,14 @@ class Robot():
         self._speed = speed
         
         while True:
+            
+            if self.visited_customers == set() and not self.block and self.current_node == '3':
+                self.led.value(1)
+            
+            if self.visited_customers == set(['A', 'B', 'C', 'D']) and self.current_node == '3' and not self.block and self.current_target == 'START':
+                self.led.value(0)
+            
+            
             junction = self.detect_junction()
             if junction == "junc":
                 if self.current_route is not None:
@@ -156,7 +164,7 @@ class Robot():
         '''
         
         if decision > 0: # left turn
-            self._detect_junction = False
+            
             # Moving average of the right sensor
             right_sensor_hist = deque([0]*10, 10)
             right_sensor_avg = self._get_moving_avg(right_sensor_hist)
@@ -179,7 +187,7 @@ class Robot():
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
         elif decision < 0: # right turn
-            self._detect_junction = False
+            
             # Moving average of the left sensor
             left_sensor_hist = deque([0]*10, 10)
             left_sensor_avg = self._get_moving_avg(left_sensor_hist)
@@ -211,13 +219,50 @@ class Robot():
         # BUG: Need to check if this is the right way around
 
 
-        if direction > 0:
-            self.motorR.forward(speed)
-            self.motorL.reverse(speed)
-        elif direction < 0:
+        if direction < 0:
             self.motorR.reverse(speed)
             self.motorL.forward(speed)
         sleep(self.turning_time)
+        
+        
+        if direction > 0: # left turn
+            
+            # Moving average of the right sensor
+            right_sensor_hist = deque([0]*10, 10)
+            right_sensor_avg = self._get_moving_avg(right_sensor_hist)
+            # moves forward slightly to allow room for turning
+            # consider changing to a function of speed
+            # starts turning without the check 
+            self.motorR.forward(80)
+            self.motorL.reverse(80)
+            sleep(0.5)
+
+            while right_sensor_avg < 0.8:
+                self.motorR.forward(80)
+                self.motorL.reverse(80)
+                right_sensor_hist.append(self.line_sensorR.value())
+                right_sensor_avg = self._get_moving_avg(right_sensor_hist)
+        
+        if direction < 0: # left turn
+            
+            # Moving average of the right sensor
+            left_sensor_hist = deque([0]*10, 10)
+            left_sensor_avg = self._get_moving_avg(left_sensor_hist)
+            # moves forward slightly to allow room for turning
+            # consider changing to a function of speed
+            # starts turning without the check 
+            self.motorR.forward(80)
+            self.motorL.reverse(80)
+            sleep(0.5)
+
+            while left_sensor_avg < 0.8:
+                self.motorR.forward(80)
+                self.motorL.reverse(80)
+                left_sensor_hist.append(self.line_sensorL.value())
+                left_sensor_avg = self._get_moving_avg(left_sensor_hist)
+        
+        self.current_direction = (0, 1) 
+                               
         pass
 
     def back_out(self, speed, node):
@@ -323,9 +368,9 @@ class Robot():
             self.turn(direction, with_prep= False)
 
             self.current_node = convert_coord_to_node(self.current_route.pop(0))
+        
+        return
 
-        return self.target
-    
     def drop(self):
         '''
         Drop the block
@@ -334,10 +379,11 @@ class Robot():
             self.servo1.set_angle(0)
             self.block = False
             
-            direction = None # set spin direction such that it turns towards inside
+        direction = 1 if self.current_node == 'DP1' else -1 # set spin direction such that it turns towards inside
             
-            self.spin(80, direction)
-            # update route after the block has been dropped
+        self.spin(80, direction)
+        # update route after the block has been dropped
+        
 
 
 

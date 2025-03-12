@@ -108,6 +108,6 @@ def convert_coord_to_node(coord):
     return coord_to_node.get(coord, None)
 
 #test
-print(dijkstra('D', 'DP2'))
+#print(dijkstra('D', 'DP2'))
 
 

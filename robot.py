@@ -379,6 +379,42 @@ class Robot():
             self.servo1.set_angle(0)
             self.block = False
             
+        self.motorR.forward(50)
+        self.motorL.forward(50)
+
+        self.servo1.set_angle(0)
+
+        outer_left_sensor = self.outer_sensorL.value()
+        outer_right_sensor = self.outer_sensorR.value()
+
+        local_left_outer_sensor_hist = deque([0]*self._window_size, self._window_size)
+        local_right_outer_sensor_hist = deque([0]*self._window_size, self._window_size)
+
+        local_left_outer_sensor_hist.append(outer_left_sensor)
+        local_right_outer_sensor_hist.append(outer_right_sensor)
+
+        outer_left_avg = self._get_moving_avg(self.left_outer_sensor_hist)
+        outer_right_avg = self._get_moving_avg(self.right_outer_sensor_hist)
+
+        while True:
+            if outer_left_avg > 0.8 and outer_right_avg > 0.8:
+                break
+            else:
+                self.motorR.reverse(80)
+                self.motorL.reverse(80)
+
+        '''
+        while not (outer_left_avg > 0.8 and outer_right_avg > 0.8):
+            if outer_left_avg > outer_right_avg:
+                self.motorR.reverse(80)
+                self.motorL.stop()
+            elif outer_left_avg < outer_right_avg: 
+                self.motorL.reverse(80)
+                self.motorR.stop()
+            elif outer_left_avg == outer_right_avg:
+                self.motorR.reverse(80)
+                self.motorL.reverse(80)
+        '''
         direction = 1 if self.current_node == 'DP1' else -1 # set spin direction such that it turns towards inside
             
         self.spin(80, direction)

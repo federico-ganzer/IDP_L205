@@ -69,12 +69,12 @@ class Robot():
         self.servo2 = Servo(pins['servo_pin2']) # Servo 2
 
     def detect_junction(self):
+        
         '''
-        Detect junctions using outside line sensors
+        Detect junctions using outside line sensors\\
+        Returns "junc" if a junction is detected, otherwise returns False\\
         '''
-        '''
-        while loop --> moving avg. of (large amount) readings --> threshold --> if statements
-        '''
+
         outer_left_sensor = self.outer_sensorL.value()
         outer_right_sensor = self.outer_sensorR.value()
         
@@ -91,7 +91,10 @@ class Robot():
     
     def forward(self, speed):
         '''
-        Move the robot forward (CURRENTLY MOTOR TEST CODE)
+        Move the robot forward\\
+        Continuously detects junctions and follows the line\\
+        Stops the robot when the route is completed or an end condition is met\\
+        No return value\\
         '''
         self._speed = speed
         
@@ -131,13 +134,17 @@ class Robot():
         self.motorR.stop()
        
     def _get_moving_avg(self, sensor_hist):
+        '''
+        Calculate the moving average of sensor readings\\
+        Returns the moving average of the sensor readings\\
+        '''
         return sum(sensor_hist)/len(sensor_hist)
     
     def follow_line(self):
         '''
-        Follow the line using line sensors
-        1. Create moving average of prev 5 readings for each sensor
-        2. Use PID to adjust motor speeds
+        Follow the line using line sensors\\
+        Uses PID control to adjust motor speeds based on sensor readings\\
+        No return value\\
         '''
         left_sensor = self.line_sensorL.value()
         right_sensor = self.line_sensorR.value()
@@ -158,9 +165,14 @@ class Robot():
         self.motorR.forward(100 - correction)
         self.motorL.forward(100 + correction)
        
-    def turn(self, decision, with_prep = True): # NOTE: to self, junction_type is not accessed 
+    def turn(self, decision, with_prep = True):
         '''
-        Turn the robot in the specified direction defined by junction_type and the turn decision
+        Turn the robot in the specified direction defined by the turn decision \\
+        Parameters: \\
+            decision: positive for left turn, negative for right turn, zero for straight \\
+            with_prep: boolean indicating whether to move forward slightly before turning \\
+        Updates the current direction after the turn \\
+        No return value
         '''
         
         if decision > 0: # left turn
@@ -214,7 +226,11 @@ class Robot():
             
     def spin(self, speed, direction):
         '''
-        Backout the robot until the sensors line up with the line again
+        Spin the robot in place until the sensors line up with the line again\\
+        Parameters:\\
+            speed: speed of the motors\\
+            direction: positive for left spin, negative for right spin\\
+        No return value
         '''
         # BUG: Need to check if this is the right way around
 
@@ -266,6 +282,13 @@ class Robot():
         pass
 
     def back_out(self, speed, node):
+        '''
+        Back out the robot from the current position\\
+        Parameters:\\
+            speed: speed of the motors\\
+            node: current node to determine the time for reversing\\
+        No return value
+        '''
         time_for_reverse = {
             "A": 2,
             "B": 2,
@@ -281,7 +304,9 @@ class Robot():
     
     def junction_decision(self):
         '''
-        2D cross product between direction and the direction of next edge
+        Determine the direction of the turn at a junction \\
+        Uses 2D cross product between the current direction and the direction of the next edge\\
+        Returns the turn decision: positive for left, negative for right, zero for straight, False if no next direction \\
         '''
 
         if self.current_route is not None and len(self.current_route) > 1: # (used to be 2)
@@ -298,6 +323,14 @@ class Robot():
             return False
                                
     def pickup(self):
+        '''
+        Pick up a block and determine its color \\
+        Updates the current target based on the color detected \\
+        Updates the route and state variables after picking up the block \\
+        No return value
+        '''
+        
+        
         '''
         Go forwards until the robot is right in front of the block
         
@@ -373,7 +406,9 @@ class Robot():
 
     def drop(self):
         '''
-        Drop the block
+        Drop the block at the current depot\\
+        Updates the state variables after dropping the block\\
+        No return value\\
         '''
         if self.current_node in set(['DP1', 'DP2']) and self.block:
             self.servo1.set_angle(0)

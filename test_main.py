@@ -5,7 +5,6 @@ from robot import Robot
 
 # I2c bus
 i2c_bus_1 = I2C(0, sda= Pin(16), scl= Pin(17), freq= 400000)
-i2c_bus_2 = I2C(1, sda= Pin(16), scl= Pin(17), freq= 400000)
 
 pins = {'outer_sensorL_pin' : 18, 'outer_sensorR_pin' : 19,
         'line_sensorR_pin' : 20, 'line_sensorL_pin' : 21,
@@ -18,7 +17,7 @@ phys_params={'axel_width': 1, 'sensor_to_axel': 1, 'wheel_radius': 0.03,
              'motor_max_speed': 4.18879}
 
 # Robot class
-agv = Robot(i2c_bus_1, i2c_bus_2, pins, phys_params, 'START', 'A') 
+agv = Robot(i2c_bus_1, pins, 'START', 'A') 
 
 def onPress():
     print("Pressed")

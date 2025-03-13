@@ -79,3 +79,9 @@ if __name__ == "__main__":
             main()
             break
     
+'''
+TODO: 
+- Fix LED
+- Reduce sleep time at customers
+- Fix spining in right dirction at depots
+'''

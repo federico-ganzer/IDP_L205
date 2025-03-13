@@ -229,7 +229,7 @@ class Robot():
         # BUG: Need to check if this is the right way around
         
         
-        if direction > 0: # left turn
+        if direction > 0: # left spin
             
             # Moving average of the right sensor
             right_sensor_hist = deque([0]*10, 10)
@@ -247,7 +247,7 @@ class Robot():
                 right_sensor_hist.append(self.line_sensorR.value())
                 right_sensor_avg = self._get_moving_avg(right_sensor_hist)
         
-        if direction < 0: # left turn
+        if direction < 0: # right spin
             
             # Moving average of the right sensor
             left_sensor_hist = deque([0]*10, 10)

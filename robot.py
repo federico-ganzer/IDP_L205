@@ -9,7 +9,7 @@ from collections import deque
 
 class Robot():
     
-    def __init__(self, i2c_bus_1, i2c_bus_2, pins, phys_params, start, target1):
+    def __init__(self, i2c_bus_1, pins, start, target1):
         
         
         # State Variables
@@ -28,13 +28,7 @@ class Robot():
         self.visited_customers = set()
         
         
-        #Physical parameters
-        
-        #time required to turn 90 degrees (with only one wheel active) = time required to turn 180 degrees with 2 wheels active
-        self.turning_time = (3.14159*phys_params['axel_width'])/(2*phys_params['motor_max_speed']*phys_params['wheel_radius'])
         self.turning_prep_time = 0.65 # time required to move forward slightly before turning
-        self.sensor_to_axel = phys_params['sensor_to_axel']
-        
         self._speed = 100
         
         #Line following params
@@ -52,7 +46,6 @@ class Robot():
         
         #I2C Sensors
         self.tcs = TCS34725(i2c_bus_1) # Colour Sensor
-        self.tof = VL53L0X(i2c_bus_2) # ToF sensor
         
         #GPIO Connections
         self.button = Pin(pins['button_pin'], Pin.IN, Pin.PULL_DOWN)
@@ -234,12 +227,6 @@ class Robot():
         No return value
         '''
         # BUG: Need to check if this is the right way around
-
-
-        if direction < 0:
-            self.motorR.reverse(speed)
-            self.motorL.forward(speed)
-        sleep(self.turning_time)
         
         
         if direction > 0: # left turn
@@ -250,13 +237,13 @@ class Robot():
             # moves forward slightly to allow room for turning
             # consider changing to a function of speed
             # starts turning without the check 
-            self.motorR.forward(80)
-            self.motorL.reverse(80)
+            self.motorR.forward(speed)
+            self.motorL.reverse(speed)
             sleep(0.5)
 
             while right_sensor_avg < 0.8:
-                self.motorR.forward(80)
-                self.motorL.reverse(80)
+                self.motorR.forward(speed)
+                self.motorL.reverse(speed)
                 right_sensor_hist.append(self.line_sensorR.value())
                 right_sensor_avg = self._get_moving_avg(right_sensor_hist)
         
@@ -268,13 +255,13 @@ class Robot():
             # moves forward slightly to allow room for turning
             # consider changing to a function of speed
             # starts turning without the check 
-            self.motorR.forward(80)
-            self.motorL.reverse(80)
+            self.motorR.forward(speed)
+            self.motorL.reverse(speed)
             sleep(0.5)
 
             while left_sensor_avg < 0.8:
-                self.motorR.forward(80)
-                self.motorL.reverse(80)
+                self.motorR.forward(speed)
+                self.motorL.reverse(speed)
                 left_sensor_hist.append(self.line_sensorL.value())
                 left_sensor_avg = self._get_moving_avg(left_sensor_hist)
         

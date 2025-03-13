@@ -23,6 +23,7 @@ customers = set(['A', 'B', 'C', 'D'])
 
 def main():
     agv.servo1.zero()
+    
     while True:
         
         agv.forward(100)
@@ -66,7 +67,8 @@ def main():
         '''
         
         if agv.current_node == 'START' and agv.current_target == 'START':
-            agv.forward(50) # might need to use motor control directly
+            agv.motorL.forward(50)
+            agv.motorR.forward(50)
             sleep(2)
             agv.motorL.stop()
             agv.motorR.stop()

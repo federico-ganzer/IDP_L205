@@ -255,13 +255,13 @@ class Robot():
             # moves forward slightly to allow room for turning
             # consider changing to a function of speed
             # starts turning without the check 
-            self.motorR.forward(speed)
-            self.motorL.reverse(speed)
+            self.motorR.reverse(speed)
+            self.motorL.forward(speed)
             sleep(0.5)
 
             while left_sensor_avg < 0.8:
-                self.motorR.forward(speed)
-                self.motorL.reverse(speed)
+                self.motorR.reverse(speed)
+                self.motorL.forward(speed)
                 left_sensor_hist.append(self.line_sensorL.value())
                 left_sensor_avg = self._get_moving_avg(left_sensor_hist)
         
@@ -369,12 +369,13 @@ class Robot():
 
         self.servo1.set_angle(0)
     
-
         self.motorR.reverse(80)
         self.motorL.reverse(80)
         sleep(0.5)
                 
         '''
+        This does not work as linesensors are active over coloured region of depot:
+        
         while not (outer_left_avg > 0.8 and outer_right_avg > 0.8):
             if outer_left_avg > outer_right_avg:
                 self.motorR.reverse(80)
@@ -387,9 +388,10 @@ class Robot():
                 self.motorL.reverse(80)
         '''
         
-        self.block = False
-        
-        direction = 1 if self.current_node == 'DP1' else -1 # set spin direction such that it turns towards inside
+        if self.current_node == 'DP1':
+            direction = 1 # set spin direction such that it turns towards inside
+        else:
+            direction = -1
             
         self.spin(80, direction)
         # update route after the block has been dropped

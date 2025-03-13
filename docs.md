@@ -43,6 +43,7 @@
 
 **Functions:**
 - `dijkstra(adj_list, start, end)`: Applies dijkstra's algorithm between `start` and `end` nodes (in `node_id` form) when prodived with `adj_list` of the underlying graph (map) and returns a tuple containing the list of the coordinates of nodes in a route (not including `start`) and the total length of the route.
+
 - `convert_coord_to_node(coord)`: Uses the `coord_to_node` dictionary to convert phyical coordinates of nodes to their respective `node_id`.
 
 ### Sensors

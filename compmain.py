@@ -4,7 +4,7 @@ from time import sleep
 from pathfinder import dijkstra
 
 i2c_bus_1 = I2C(0, sda= Pin(16), scl= Pin(17), freq= 400000)
-i2c_bus_2 = I2C(1, sda= Pin(16), scl= Pin(17), freq= 400000)
+# i2c_bus_2 = I2C(1, sda= Pin(16), scl= Pin(17), freq= 400000)
 
 pins = {'outer_sensorL_pin' : 18, 'outer_sensorR_pin' : 19,
         'line_sensorR_pin' : 20, 'line_sensorL_pin' : 21,
@@ -22,7 +22,7 @@ agv = Robot(i2c_bus_1, pins, start= 'BOX', target1= 'A') # Start at BOX and go t
 customers = set(['A', 'B', 'C', 'D'])
 
 def main():
-    
+    agv.servo1.zero()
     while True:
         
         agv.forward(100)

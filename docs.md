@@ -17,7 +17,7 @@
 
 **File:** `robot.py`
 
-**Description:** Contains `Robot(i2c_bus, pins[dict], start, target1)` class. Robot contains methods for AGV control for manouvring and collecting/depositing loads. Class is initialised with i2c pins and pin numbers associated with the servos, motors and sensors and can be easily modified as a modular system (eg. if sensor or servo additions are made). `start` and `target1` (in `node_id` form) are necessary to set the first route the `Robot()` should follow.
+**Description:** Contains `Robot(i2c_bus, pins[dict], start, target1)` class. `Robot()` contains methods for AGV control for manouvring and collecting/depositing loads. Class is initialised with i2c pins and pin numbers associated with the servos, motors and sensors and can be easily modified as a modular system (eg. if sensor or servo additions are made). `start` and `target1` (in `node_id` form) are necessary to set the first route the `Robot()` should follow.
 
 **Methods:**
 - `forward()`: Drives robot motors at desired speed with optional line following and junction decision logic. Uses PID control for straight line following.

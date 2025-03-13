@@ -1,10 +1,11 @@
 #  It Doesn’t Perform - L205
-This is the code for the Integrated Design Project (IDP) done in Lent 2023-4. Documentation can be found in ['docs.md'](docs.md). 
+This repository is for the Integrated Design Project (IDP) belonging to Team 205 done in Lent 2023-4. 
 
-## Key info for the team
-### To-do:
-- pick up routine
-- drop off routine
+##Documentation:
+- **Software:** ['docs.md'](docs.md).
+- **Electrical:**
+- **Mechanical:**
+
 
 ![Circuit Diagram](CircuitBoardWiring.png)
 

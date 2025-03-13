@@ -28,7 +28,7 @@ class Robot():
         self.visited_customers = set()
         
         
-        self.turning_prep_time = 0.65 # time required to move forward slightly before turning
+        self.turning_prep_time = 0.5 # time required to move forward slightly before turning
         self._speed = 100
         
         #Line following params
@@ -330,9 +330,10 @@ class Robot():
             else: # just so it goes to a depot.. doesn't matter which one
                 self.current_target = 'DP1' 
                 raise ValueError('Colour not detected')
+            temp_i += 1
 
         cct_avg = self._get_moving_avg(cct_hist)
-        self.current_target = 'DP1' if cct_avg < 5000 else 'DP2'
+        self.current_target = 'DP1' if cct_avg < 6000 else 'DP2'
         
         # update state
         route = dijkstra(self.current_node, self.current_target)
@@ -367,23 +368,11 @@ class Robot():
         self.motorL.forward(50)
 
         self.servo1.set_angle(0)
+    
 
-        self.left_outer_sensor_hist = deque([0]*self._window_size, self._window_size)
-        self.right_outer_sensor_hist = deque([0]*self._window_size, self._window_size)
-
-        while True:
-            
-            self.left_outer_sensor_hist.append(self.outer_sensorL.value())
-            self.right_outer_sensor_hist.append(self.outer_sensorR.value())
-            
-            outer_left_avg = self._get_moving_avg(self.left_outer_sensor_hist)
-            outer_right_avg = self._get_moving_avg(self.right_outer_sensor_hist)
-            
-            if outer_left_avg > 0.8 and outer_right_avg > 0.8:
-                break
-            else:
-                self.motorR.reverse(80)
-                self.motorL.reverse(80)
+        self.motorR.reverse(80)
+        self.motorL.reverse(80)
+        sleep(0.5)
                 
         '''
         while not (outer_left_avg > 0.8 and outer_right_avg > 0.8):

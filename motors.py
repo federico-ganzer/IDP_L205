@@ -29,6 +29,6 @@ class Servo():
     def set_angle(self, angle):
         self.pwm.duty_u16(int(1802 - 7864 * angle / 270))
 
-    def stop(self):
+    def zero(self):
         self.pwm.duty_u16(0)
         

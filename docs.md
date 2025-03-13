@@ -12,6 +12,10 @@
 ## Introduction
 
 ## Modules
+- [Robot](#robot)
+- [Pathfinder](#pathfinder)
+- [Sensors](#sensors)
+- [Motors](#motors)
 
 ### Robot
 

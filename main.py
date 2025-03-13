@@ -1,11 +1,10 @@
-from time import sleep
-from machine import I2C, Pin
-from motors import Motor, Servo
 from robot import Robot
+from machine import I2C, Pin
+from time import sleep
+from pathfinder import dijkstra
 
-# I2c bus
 i2c_bus_1 = I2C(0, sda= Pin(16), scl= Pin(17), freq= 400000)
-i2c_bus_2 = I2C(1, sda= Pin(16), scl= Pin(17), freq= 400000)
+# i2c_bus_2 = I2C(1, sda= Pin(16), scl= Pin(17), freq= 400000)
 
 pins = {'outer_sensorL_pin' : 18, 'outer_sensorR_pin' : 19,
         'line_sensorR_pin' : 20, 'line_sensorL_pin' : 21,
@@ -18,26 +17,73 @@ phys_params={'axel_width': 1, 'sensor_to_axel': 1, 'wheel_radius': 0.03,
              'motor_max_speed': 4.18879}
 
 # Robot class
-agv = Robot(i2c_bus_1, i2c_bus_2, pins, phys_params, 'START', 'A') 
+agv = Robot(i2c_bus_1, pins, start= 'BOX', target1= 'A') # Start at BOX and go to A
+ # Test Route from START to A
+customers = set(['A', 'B', 'C', 'D'])
 
-def onPress():
-    print("Pressed")
-    agv.forward(80)
-
-while True:
-    if agv.button.value() == 1:
-        onPress()
-        break
-
-'''
-1. Observe colour of block
-2. Initiate pick-up routine
-2. Find shortest path from customer to delivery point in table
-3. Initiate Backout routine
-3. Use junction count and landmarks to track progress and when to turn
-4. Once end of route is reached, initiate delivery routine
-'''
-   
-
-
+def main():
+    agv.servo1.zero()
     
+    while True:
+        
+        agv.forward(100)
+        '''
+        added to self.forward()
+        
+        if agv.visited_customers == set() and not agv.block and agv.current_node == '3':
+            agv.led.value(1) # Turn on LED when AGV first starts at node 3 this can be changed to when it leaves the box
+        '''    
+        if agv.current_node in customers:
+            agv.pickup() # backout() and turn() included. Takes in paramters of 'current_pickup_point'
+              
+        if agv.current_node in set(['DP1', 'DP2']):
+            agv.drop() # spin() included
+            
+            min_distance = float('inf')
+            
+            for customer in customers - agv.visited_customers:# Cycle through not visited customers
+                    result = dijkstra(agv.current_node, customer)
+                    if result is not None:
+                        path, distance = result
+                        min_distance = min(min_distance, distance)
+                        if min_distance == distance:
+                            min_path = path
+                            min_customer = customer
+            
+            agv.current_target = min_customer # current_target is set to closest customer to depot
+            agv.current_route = min_path
+            
+        if agv.current_node in set(['DP1', 'DP2']) and agv.visited_customers == customers and not agv.block:
+            agv.current_target = 'START'
+            route = dijkstra(agv.current_node, 'START')
+            if route is not None:
+                agv.current_route = route[0]
+        
+        '''
+        added to self.forward()
+        
+         if agv.visited_customers == customers and agv.current_node == '3' and not agv.block and agv.current_target == 'START':
+            agv.led.value(0) # Turn off LED when AGV reaches node 3 and is ready to go back to START
+        '''
+        
+        if agv.current_node == 'START' and agv.current_target == 'START':
+            agv.motorL.forward(50)
+            agv.motorR.forward(50)
+            sleep(2)
+            agv.motorL.stop()
+            agv.motorR.stop()
+            break
+            
+            
+if __name__ == "__main__":
+    while True:
+        if agv.button.value() == 1:
+            main()
+            break
+    
+'''
+TODO: 
+- Fix LED
+- Reduce sleep time at customers
+- Fix spining in right dirction at depots
+'''

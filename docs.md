@@ -12,6 +12,10 @@
 ## Introduction
 
 ## Modules
+- [Robot](#robot)
+- [Pathfinder](#pathfinder)
+- [Sensors](#sensors)
+- [Motors](#motors)
 
 ### Robot
 
@@ -33,7 +37,7 @@
 - `spin()`: Performs a spin by 180 degrees. This will check that the configuration of the robot has now been realligned also (to an approximate degree) before the `follow_line()` takes over again.
 
 - `pickup()`: Routine actuates the servo to pick up the block. The colour of the block is identified and the according depot is assigned as the `self.current_target`, creating a new route for `Robot()` to follow in forward. The `Robot()` will turn out of the customer zone accordingly.
-- `drop()`: 
+- `drop()`: Actuates the servo to drop the block. Then the next closest customer is determined for `Robot()`. The `Robot()` turns out of the depot, facing away from the wall to avoid collision, and then exits the routine. 
 
 ### Pathfinder
  

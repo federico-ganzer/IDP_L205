@@ -198,6 +198,7 @@ class Robot():
             # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
+        
         elif decision < 0: # right turn
             
             # Moving average of the left sensor
@@ -419,25 +420,23 @@ class Robot():
 
         self.servo1.set_angle(0)
 
-        outer_left_sensor = self.outer_sensorL.value()
-        outer_right_sensor = self.outer_sensorR.value()
-
-        local_left_outer_sensor_hist = deque([0]*self._window_size, self._window_size)
-        local_right_outer_sensor_hist = deque([0]*self._window_size, self._window_size)
-
-        local_left_outer_sensor_hist.append(outer_left_sensor)
-        local_right_outer_sensor_hist.append(outer_right_sensor)
-
-        outer_left_avg = self._get_moving_avg(self.left_outer_sensor_hist)
-        outer_right_avg = self._get_moving_avg(self.right_outer_sensor_hist)
+        self.left_outer_sensor_hist = deque([0]*self._window_size, self._window_size)
+        self.right_outer_sensor_hist = deque([0]*self._window_size, self._window_size)
 
         while True:
+            
+            self.left_outer_sensor_hist.append(self.outer_sensorL.value())
+            self.right_outer_sensor_hist.append(self.outer_sensorR.value())
+            
+            outer_left_avg = self._get_moving_avg(self.left_outer_sensor_hist)
+            outer_right_avg = self._get_moving_avg(self.right_outer_sensor_hist)
+            
             if outer_left_avg > 0.8 and outer_right_avg > 0.8:
                 break
             else:
                 self.motorR.reverse(80)
                 self.motorL.reverse(80)
-
+                
         '''
         while not (outer_left_avg > 0.8 and outer_right_avg > 0.8):
             if outer_left_avg > outer_right_avg:
@@ -450,6 +449,9 @@ class Robot():
                 self.motorR.reverse(80)
                 self.motorL.reverse(80)
         '''
+        
+        self.block = False
+        
         direction = 1 if self.current_node == 'DP1' else -1 # set spin direction such that it turns towards inside
             
         self.spin(80, direction)

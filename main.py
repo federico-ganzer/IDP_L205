@@ -29,7 +29,6 @@ while True:
         onPress()
         break
 
-
 '''
 1. Observe colour of block
 2. Initiate pick-up routine

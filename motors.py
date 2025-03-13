@@ -27,7 +27,7 @@ class Servo():
         self.pwm.duty_u16(0) # set duty cycle
 
     def set_angle(self, angle):
-        self.pwm.duty_u16(int(65535 * angle / 180))
+        self.pwm.duty_u16(int(1802 - 7864 * angle / 270))
 
     def stop(self):
         self.pwm.duty_u16(0)

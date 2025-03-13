@@ -24,7 +24,7 @@
 
 - `turn()`: Following a call to `junction_decision()`, the robot performs a 90 degree turn in the direction set by `junction_decision()`, provided that junction type also satisfies the turn. The current state variables are then updated. This checks that the middle sensor (on the side opposite to that of the direction of tha turn) is on the line and then exits the function, such that the PID control in `forward()` is reinitiated. Boolean `with_prep = True` determines if a turning prep-time should be added. During this prep-time the robot continues forward for a set time interval before turning. `with_prep` should be turned false if turning from a reverse position.
 
-- `junction_decision()`: Using a 2D vector product between the current and next directions, the function returns a value that when positive indicates a left turn, when negative, a right turn, and when zero straight. If the `robot()` is at the end of the `current_route`, the robot stops.
+- `junction_decision()`: Using a 2D vector product between the current and next direction, the function returns a value that when positive indicates a left turn, when negative, a right turn, and when zero straight. If the `Robot()` is at the end of the `current_route`, the robot stops.
 
 - `detect_junction()`: Uses the two outer line sensors to detect junctions and the type of junction (`'R', 'L', 'T'`). This is then used to verify the validity of the turn in `turn(junction_type, decision)` and update the position of `current_node`(graphical representation of position) in `forward()`.
 

@@ -290,10 +290,10 @@ class Robot():
         No return value
         '''
         time_for_reverse = {
-            "A": 2,
-            "B": 2,
-            "C": 2,
-            "D": 1,
+            "A": 1.3,
+            "B": 0.9,
+            "C": 1.3,
+            "D": 0.9,
             "DP1": 2,
             "DP2": 2
         }
@@ -329,61 +329,22 @@ class Robot():
         Updates the route and state variables after picking up the block \\
         No return value
         '''
-        
-        
-        '''
-        Go forwards until the robot is right in front of the block
-        
-        Pick up the block and read colour:
-        1. Use ultrasonic sensor to check if block is in front of robot
-        2. Check alignment
-        4. Turn on colour sensor
-        5. forward (include in main as opposed to here?)
-        6. activate lift
-        Now need to spin
-        then go past the lines
-        then go to back to forward method
-        '''
-        '''
-        # Actual pick up of the block
-        self.motorR.forward(60)
-        self.motorL.forward(60)
-        sleep(0.2)
-        # INFO: code for the distance sensor goes here... depending on the distance sensor data, we can go forwards, until the distance is a certain value. Once this has been done, then it will pick up the block using a servo.
-        # We might not need to use this ToF sensor, if the line sensing is good enough
-        # following code was copied from the default given to us
-        budget = self.tof.measurement_timing_budget_us
-        print("Budget was:", budget)
-        self.tof.set_measurement_timing_budget(400000)
-        # Sets the VCSEL (vertical cavity surface emitting laser) pulse period for the 
-        # given period type (VL53L0X::VcselPeriodPreRange or VL53L0X::VcselPeriodFinalRange) 
-        # to the given value (in PCLKs). Longer periods increase the potential range of the sensor. 
-        # Valid values are (even numbers only):
-        # tof.set_Vcsel_pulse_period(tof.vcsel_period_type[0], 18)
-        self.tof.set_Vcsel_pulse_period(self.tof.vcsel_period_type[0], 12)
-        # tof.set_Vcsel_pulse_period(tof.vcsel_period_type[1], 14)
-        self.tof.set_Vcsel_pulse_period(self.tof.vcsel_period_type[1], 8)
-        while True:
-        # Start ranging
-            ping = self.tof.ping()
-            
-            if ping is not None:
-                print(ping - 50, "mm")
-                if ping - 50 < 10:
-                    self.motorR.stop()
-                    self.motorL.stop()
-                    break
-        '''
-        
+
         # servo twisting 
         self.servo1.set_angle(15)
 
-        cct, y = self.tcs.read()
-        if cct is not None:
-            self.current_target =  'DP1' if cct < 5000 else 'DP2'
-        else: # just so it goes to a depot.. doesn't matter which one
-            self.current_target = 'DP1' 
-            raise ValueError('Colour not detected')
+        cct_hist = deque([0]*50, 50)
+        temp_i = 0
+        while temp_i < 100:
+            cct, y = self.tcs.read()
+            if cct is not None:
+                cct_hist.append(int(cct))
+            else: # just so it goes to a depot.. doesn't matter which one
+                self.current_target = 'DP1' 
+                raise ValueError('Colour not detected')
+
+        cct_avg = self._get_moving_avg(cct_hist)
+        self.current_target = 'DP1' if cct_avg < 5000 else 'DP2'
         
         # update state
         route = dijkstra(self.current_node, self.current_target)

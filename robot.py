@@ -396,8 +396,3 @@ class Robot():
         self.spin(80, direction)
         # update route after the block has been dropped
         
-
-'''
-TODO:
-- Test compmain.py
-'''

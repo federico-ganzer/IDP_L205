@@ -10,7 +10,11 @@
 2. [Modules](#modules)
 
 ## Introduction
-![Graph](graph.png)
+
+<div align="center">
+  <img src="graph.png" alt="Graph" width="400">
+  <p><em>Figure 1: Example Graph</em></p>
+</div>
 
 
 ## Modules

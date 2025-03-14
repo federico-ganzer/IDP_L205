@@ -13,7 +13,7 @@
 The general approach of the software structure was to create an AGV class (`Robot()`) that could be used to access motor control, sensor readings, and storing of current state variables associated to what the robot's current task is. The AGV class would respond to changes in its current route and move from node to node accordingly.
 <div align="center">
   <img src="graph.png" alt="Graph" width="400">
-  <p><em>Figure 1: Graph of physical map of town with `node_id` and edge values used by `pathfinder.py`</em></p>
+  <p><em>Figure 1: Graph of town with `node_id` and edge values used by `pathfinder.py`</em></p>
 </div>
 
 

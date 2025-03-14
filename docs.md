@@ -10,7 +10,9 @@
 2. [Modules](#modules)
 
 ## Introduction
-![Graph](graph.png)
+![Graph][<img src="drawing.jpg" alt="drawing" width="200"/>](graph.png)
+
+
 ## Modules
 - [Robot](#robot)
 - [Pathfinder](#pathfinder)

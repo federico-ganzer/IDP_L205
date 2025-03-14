@@ -21,7 +21,7 @@ The general approach of the software structure was to create an AGV class (`Robo
 - [robot.py](#robot.py)
 - [pathfinder.py](#pathfinder.py)
 - [Sensors](#sensors)
-- [Motors](#motors)
+- [motors.py](#motors.py)
 
 ### `robot.py`
 

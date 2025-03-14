@@ -18,14 +18,12 @@ The general approach of the software structure was to create an AGV class (`Robo
 
 
 ## Modules
-- [Robot](#robot)
-- [Pathfinder](#pathfinder)
+- [robot.py](#robot)
+- [pathfinder.py](#pathfinder)
 - [Sensors](#sensors)
 - [Motors](#motors)
 
-### Robot
-
-**File:** `robot.py`
+### robot.py
 
 **Description:** Contains `Robot(i2c_bus, pins[dict], start, target1)` class. `Robot()` contains methods for AGV control for manouvring and collecting/depositing loads. Class is initialised with i2c pins and pin numbers associated with the servos, motors and sensors and can be easily modified as a modular system (eg. if sensor or servo additions are made). `start` and `target1` (in `node_id` form) are necessary to set the first route the `Robot()` should follow.
 
@@ -45,9 +43,7 @@ The general approach of the software structure was to create an AGV class (`Robo
 - `pickup()`: Routine actuates the servo to pick up the block. The colour of the block is identified and the according depot is assigned as the `self.current_target`, creating a new route for `Robot()` to follow in forward. The `Robot()` will turn out of the customer zone accordingly.
 - `drop()`: Actuates the servo to drop the block. Then the next closest customer is determined for `Robot()`. The `Robot()` turns out of the depot, facing away from the wall to avoid collision, and then exits the routine. 
 
-### Pathfinder
- 
-**File:** `pathfinder.py`
+### `pathfinder.py`
 
 **Description:** Makes use of adjacency table of graph and Dijkstra's algorithm to find the minimal distance path from a given `start` node to `end` node. Includes a map from each node to their coordinate in physical space, which is used to determine which direction turns need to be made in.
 

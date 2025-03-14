@@ -18,12 +18,12 @@ The general approach of the software structure was to create an AGV class (`Robo
 
 
 ## Modules
-- [robot.py](#robot)
-- [pathfinder.py](#pathfinder)
+- [robot.py](#robot.py)
+- [pathfinder.py](#pathfinder.py)
 - [Sensors](#sensors)
 - [Motors](#motors)
 
-### robot.py
+### `robot.py`
 
 **Description:** Contains `Robot(i2c_bus, pins[dict], start, target1)` class. `Robot()` contains methods for AGV control for manouvring and collecting/depositing loads. Class is initialised with i2c pins and pin numbers associated with the servos, motors and sensors and can be easily modified as a modular system (eg. if sensor or servo additions are made). `start` and `target1` (in `node_id` form) are necessary to set the first route the `Robot()` should follow.
 
@@ -56,8 +56,7 @@ The general approach of the software structure was to create an AGV class (`Robo
 **File:** `sensors.py`  
 **Description:**  Includes classes and methods responsible for sensor reading
 
-### Motors
-**File:** `motors.py`
+### `motors.py`
 **Description:** Includes two class definitions that are used primarily in the `robot.py`, that controls the motor movements as well as servo movements. 
 
 #### Motor(dir_pin, pwm_pin)

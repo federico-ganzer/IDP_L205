@@ -4,7 +4,6 @@ from time import sleep
 from pathfinder import dijkstra
 
 i2c_bus_1 = I2C(0, sda= Pin(16), scl= Pin(17), freq= 400000)
-# i2c_bus_2 = I2C(1, sda= Pin(16), scl= Pin(17), freq= 400000)
 
 pins = {'outer_sensorL_pin' : 18, 'outer_sensorR_pin' : 19,
         'line_sensorR_pin' : 20, 'line_sensorL_pin' : 21,
@@ -12,9 +11,6 @@ pins = {'outer_sensorL_pin' : 18, 'outer_sensorR_pin' : 19,
         'motorL_pwm_pin' : 6, 'motorL_dir_pin' : 7, # Motor Pins are Hard Coded in Robot()
         'servo_pin1' : 13, 'servo_pin2' : 15,
         'led_pin' : 14, 'button_pin': 12 }
-
-phys_params={'axel_width': 1, 'sensor_to_axel': 1, 'wheel_radius': 0.03,
-             'motor_max_speed': 4.18879}
 
 # Robot class
 agv = Robot(i2c_bus_1, pins, start= 'BOX', target1= 'A') # Start at BOX and go to A
@@ -27,15 +23,10 @@ def main():
     while True:
         
         agv.forward(100)
-        '''
-        added to self.forward()
-        
-        if agv.visited_customers == set() and not agv.block and agv.current_node == '3':
-            agv.led.value(1) # Turn on LED when AGV first starts at node 3 this can be changed to when it leaves the box
-        '''    
+
         if agv.current_node in customers:
-            agv.pickup() # backout() and turn() included. Takes in paramters of 'current_pickup_point'
-              
+            agv.pickup() # backout() and turn() included.
+            
         if agv.current_node in set(['DP1', 'DP2']):
             agv.drop() # spin() included
             
@@ -59,12 +50,6 @@ def main():
             if route is not None:
                 agv.current_route = route[0]
         
-        '''
-        added to self.forward()
-        
-         if agv.visited_customers == customers and agv.current_node == '3' and not agv.block and agv.current_target == 'START':
-            agv.led.value(0) # Turn off LED when AGV reaches node 3 and is ready to go back to START
-        '''
         
         if agv.current_node == 'START' and agv.current_target == 'START':
             agv.motorL.forward(50)
@@ -85,5 +70,4 @@ if __name__ == "__main__":
 TODO: 
 - Fix LED
 - Reduce sleep time at customers
-- Fix spining in right dirction at depots
 '''

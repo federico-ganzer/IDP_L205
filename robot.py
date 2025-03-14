@@ -374,7 +374,7 @@ class Robot():
         sleep(0.5)
                 
         '''
-        This does not work as linesensors are active over coloured region of depot:
+        This does not work as line sensors are active over coloured region of depot:
         
         while not (outer_left_avg > 0.8 and outer_right_avg > 0.8):
             if outer_left_avg > outer_right_avg:
@@ -388,11 +388,8 @@ class Robot():
                 self.motorL.reverse(80)
         '''
         
-        if self.current_node == 'DP1':
-            direction = 1 # set spin direction such that it turns towards inside
-        else:
-            direction = -1
-            
+        direction = 1 if self.current_node == 'DP1' else -1
+        
         self.spin(80, direction)
         # update route after the block has been dropped
         

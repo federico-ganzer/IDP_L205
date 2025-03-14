@@ -18,7 +18,7 @@ agv = Robot(i2c_bus_1, pins, start= 'BOX', target1= 'A') # Start at BOX and go t
 customers = set(['A', 'B', 'C', 'D'])
 
 def main():
-    agv.servo1.zero()
+    agv.servo1.zero() # set servo to zero 
     
     while True:
         

@@ -58,7 +58,7 @@ The general approach of the software structure was to create an AGV class (`Robo
 **Description:**  Includes the class TCS34725, which contains methods for initialising the colour sensor as well as reading the colour temperature, which is used in [`pickup()`](#pickup) to identify the colour of the block that has been picked up. 
 
 **File:** `vl53l0x.py`
-**Description:**  Includes classes and methods responsible for sensor reading
+**Description:** Includes the class for the ToF sensor, which right now is being unused.
 
 
 

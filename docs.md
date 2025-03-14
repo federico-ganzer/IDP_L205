@@ -40,7 +40,7 @@ The general approach of the software structure was to create an AGV class (`Robo
 
 - `spin()`: Performs a spin by 180 degrees. This will check that the configuration of the robot has now been realligned also (to an approximate degree) before the `follow_line()` takes over again.
 
-- `pickup()`: Routine actuates the servo to pick up the block. The colour of the block is identified and the according depot is assigned as the `self.current_target`, creating a new route for `Robot()` to follow in forward. The `Robot()` will turn out of the customer zone accordingly.
+- <a id="pickup"></a> `pickup()`: Routine actuates the servo to pick up the block. The colour of the block is identified and the according depot is assigned as the `self.current_target`, creating a new route for `Robot()` to follow in forward. The `Robot()` will turn out of the customer zone accordingly.
 - `drop()`: Actuates the servo to drop the block. Then the next closest customer is determined for `Robot()`. The `Robot()` turns out of the depot, facing away from the wall to avoid collision, and then exits the routine. 
 
 ### `pathfinder.py`
@@ -53,8 +53,13 @@ The general approach of the software structure was to create an AGV class (`Robo
 - `convert_coord_to_node(coord)`: Uses the `coord_to_node` dictionary to convert phyical coordinates of nodes to their respective `node_id`.
 
 ### Sensors
-**File:** `sensors.py`  
+**File:** `tcs34725.py`
+**Description:**  Includes the class TCS34725, which contains methods for initialising the colour sensor as well as reading the colour temperature, which is used in [`pickup()`](#pickup) to identify the colour of the block that has been picked up. 
+
+**File:** `vl53l0x.py`
 **Description:**  Includes classes and methods responsible for sensor reading
+
+
 
 ### `motors.py`
 **Description:** Includes two class definitions that are used primarily in the `robot.py`, that controls the motor movements as well as servo movements. 

@@ -13,7 +13,7 @@
 
 <div align="center">
   <img src="graph.png" alt="Graph" width="400">
-  <p><em>Figure 1: Example Graph</em></p>
+  <p><em>Figure 1: Graph of physical map of town with `node_id` and edge values used by `pathfinder.py`</em></p>
 </div>
 
 

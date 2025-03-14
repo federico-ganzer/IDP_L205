@@ -110,4 +110,3 @@ def convert_coord_to_node(coord):
 #test
 #print(dijkstra('D', 'DP2'))
 
-

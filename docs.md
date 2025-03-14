@@ -10,7 +10,7 @@
 2. [Modules](#modules)
 
 ## Introduction
-![Graph][<img src="drawing.jpg" alt="drawing" width="200"/>](graph.png)
+![Graph](graph.png)
 
 
 ## Modules

@@ -53,15 +53,6 @@ The general approach of the software structure was to create an AGV class (`Robo
 
 - `convert_coord_to_node(coord)`: Uses the `coord_to_node` dictionary to convert phyical coordinates of nodes to their respective `node_id`.
 
-### Sensors
-**File:** `tcs34725.py`
-**Description:**  Includes the class TCS34725, which contains methods for initialising the colour sensor as well as reading the colour temperature, which is used in [`pickup()`](#pickup) to identify the colour of the block that has been picked up. 
-
-**File:** `vl53l0x.py`
-**Description:** Includes the class for the ToF sensor, which right now is being unused.
-
-
-
 ### `motors.py`
 **Description:** Includes two class definitions that are used primarily in the `robot.py`, that controls the motor movements as well as servo movements. 
 
@@ -76,6 +67,17 @@ Takes parameters of the pins used, and has the following methods:
 Takes parameters of the pin (singular) used. It has the following methods:
 - `set_angle(angle)`
 - `zero()`
+
+  
+### Sensors
+**File:** `tcs34725.py`
+**Description:**  Includes the class TCS34725, which contains methods for initialising the colour sensor as well as reading the colour temperature, which is used in [`pickup()`](#pickup) to identify the colour of the block that has been picked up. 
+
+**File:** `vl53l0x.py`
+**Description:** Includes the class for the ToF sensor, which is not used but could be implemented in the `Robot()` class.
+
+
+
 
 
 

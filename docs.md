@@ -28,7 +28,7 @@ The general approach of the software structure was to create an AGV class (`Robo
 **Description:** Contains `Robot(i2c_bus, pins[dict], start, target1)` class. `Robot()` contains methods for AGV control for manouvring and collecting/depositing loads. Class is initialised with i2c pins and pin numbers associated with the servos, motors and sensors and can be easily modified as a modular system (eg. if sensor or servo additions are made). `start` and `target1` (in `node_id` form) are necessary to set the first route the `Robot()` should follow.
 
 **Methods:**
-- <a id="forward"></a> `forward()`: Drives robot motors at desired speed with line following and junction decision logic. Uses PID control for straight line following from [`follow_line()`](#follow_line)
+- <a id="forward"></a> `forward()`: Drives robot motors at desired speed with line following and junction decision logic. Uses PID control for straight line following from [`follow_line()`](#follow_line).
 
 - <a id="turn"></a> `turn()`: Following a call to [`junction_decision()`](#junction_decision), the robot performs a 90 degree turn in the direction set by `junction_decision()`, provided that junction type also satisfies the turn. The current state variables are then updated. This checks that the middle sensor (on the side opposite to that of the direction of tha turn) is on the line and then exits the function, such that the PID control in `forward()` is reinitiated. Boolean `with_prep = True` determines if a turning prep-time should be added. During this prep-time the robot continues forward for a set time interval before turning. `with_prep` should be turned false if turning from a reverse position.
 
@@ -65,14 +65,14 @@ The general approach of the software structure was to create an AGV class (`Robo
 ### `motors.py`
 **Description:** Includes two class definitions that are used primarily in the `robot.py`, that controls the motor movements as well as servo movements. 
 
-#### Motor(dir_pin, pwm_pin)
+#### `Motor(dir_pin, pwm_pin)`
 Takes parameters of the pins used, and has the following methods:
 - `self.forward(speed)`
 - `self.reverse(speed)`
 - `self.stop()`
 
 
-#### Servo(pwn_pin)
+#### `Servo(pwn_pin)`
 Takes parameters of the pin (singular) used. It has the following methods:
 - `set_angle(angle)`
 - `zero()`

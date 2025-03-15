@@ -1,5 +1,5 @@
 
-# Team L205 IDP
+# Team L205 IDP Software Documentation
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)  
 ![Version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)

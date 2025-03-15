@@ -34,7 +34,7 @@ The general approach of the software structure was to create an AGV class (`Robo
 
 - <a id="junction_decision"></a> `junction_decision()`: Using a 2D vector product between the current and next direction, the function returns a value that when positive indicates a left turn, when negative, a right turn, and when zero straight. If the `Robot()` is at the end of the `current_route`, the robot stops.
 
-- <a id="detect_junction"></a> `detect_junction()`: Uses the two outer line sensors to detect junctions and the type of junction (`'R', 'L', 'T'`). This is then used to verify the validity of the turn in `turn(junction_type, decision)` and update the position of `current_node`(graphical representation of position) in [`forward()`](#forward).
+- <a id="detect_junction"></a> `detect_junction()`: Uses the two outer line sensors to detect junctions. If a junction is detected [`junction_decision()`](#junction_decision) is called and the position of `current_node`(graphical representation of position) is updated in [`forward()`](#forward).
 
 - <a id="follow_line"></a> `follow_line()`: Implements PID control with two line sensor inputs straddling the line to follow the line. PID weights can be adjusted in `self.kp`, `self.ki`, and `self.kd`.
 

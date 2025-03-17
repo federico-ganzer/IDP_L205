@@ -6,13 +6,11 @@ This repository is for the Integrated Design Project (IDP) belonging to Team 205
 - **Electrical:** ['IDP___Electrical_Documentation.pdf'](IDP___Electrical_Documentation.pdf) (DRAFT)
 - **Mechanical:**
 
-
-![Circuit Diagram](CircuitBoardWiring.png)
-
-## Team Leads:
-- Electrical: Alex
-- Software: Federico
-- Mechanical: Tom
-
-
-
+## Our Team:
+- Somanshu - Software
+- Josh - Electrical/Software
+- Alex - Electrical/Mechanical
+- Hayyan - Mechanical
+- Tom - Mechanical
+- Djaafar - Mechanical
+- Federico - Software

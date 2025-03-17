@@ -95,7 +95,7 @@ class Robot():
             
             if self.visited_customers == set() and not self.block and self.current_node == '3':
                 self.led.value(1)
-            
+            # FIXME: depending on whether we want more blocks we will need to change this condition also
             if self.visited_customers == set(['A', 'B', 'C', 'D']) and self.current_node == '3' and not self.block and self.current_target == 'START':
                 self.led.value(0)
             

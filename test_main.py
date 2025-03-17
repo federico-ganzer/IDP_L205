@@ -21,7 +21,9 @@ agv = Robot(i2c_bus_1, pins, 'START', 'A')
 
 def onPress():
     print("Pressed")
-    agv.forward(80)
+    
+    while True:
+        agv.led.value(1)
 
 while True:
     if agv.button.value() == 1:

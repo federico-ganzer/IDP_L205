@@ -280,7 +280,7 @@ class Robot():
         time_for_reverse = {
             "A": 1.3,
             "B": 0.9,
-            "C": 1.3,
+            "C": 1.1,
             "D": 0.9,
             "DP1": 2,
             "DP2": 2

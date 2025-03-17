@@ -225,8 +225,6 @@ class Robot():
             direction: positive for left spin, negative for right spin\\
         No return value
         '''
-        # BUG: Need to check if this is the right way around
-        
         
         if direction > 0: # left spin
             
@@ -325,7 +323,7 @@ class Robot():
         temp_i = 0
         while temp_i < 10:
             cct, y = self.tcs.read()
-            if cct is not None:
+            if cct is not None and y is not None:
                 cct_hist.append(int(cct))
                 y_hist.append(y)
             else: # just so it goes to a depot.. doesn't matter which one

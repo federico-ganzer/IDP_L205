@@ -1,7 +1,6 @@
 from machine import Pin
 from time import sleep
 from sensors.tcs34725 import TCS34725
-from sensors.vl53l0x import VL53L0X
 from pathfinder import dijkstra, convert_coord_to_node
 from motors import Motor, Servo
 from collections import deque

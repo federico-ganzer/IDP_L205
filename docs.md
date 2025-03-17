@@ -15,7 +15,7 @@ The general approach of the software structure was to create an AGV class (`Robo
   <img src="graph.png" alt="Graph" width="400">
   <p><em>Figure 1: Graph of town with `node_id` and edge values used by `pathfinder.py`</em></p>
 </div>
-
+The main loop (in `main.py`) starts by initialising the robot with the current target of `A`. Once the robot navigates to its target, it enters the pickup routine and initializes a new route based on the colour of the package it picked up. The route is then navigated, the block is dropped and a new route is initialized to the closest non-visited customer. The process is repeated until all customers have been visited. The robot then returns to the start box.
 
 ## Modules
 - [robot.py](#robot.py)

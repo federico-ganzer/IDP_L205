@@ -10,7 +10,7 @@ pins = {'outer_sensorL_pin' : 18, 'outer_sensorR_pin' : 19,
         'motorR_pwm_pin' : 4, 'motorR_dir_pin' : 5, # Motor Pins are Hard Coded in Robot()
         'motorL_pwm_pin' : 6, 'motorL_dir_pin' : 7, # Motor Pins are Hard Coded in Robot()
         'servo_pin1' : 13, 'servo_pin2' : 15,
-        'led_pin' : 14, 'button_pin': 12 }
+        'led_pin' : 22, 'button_pin': 12 }
 
 # Robot class
 agv = Robot(i2c_bus_1, pins, start= 'BOX', target1= 'A') # Start at BOX and go to A

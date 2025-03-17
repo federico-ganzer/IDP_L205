@@ -28,7 +28,7 @@ class Robot():
         self.visited_customers = set()
         
         
-        self.turning_prep_time = 0.5 # time required to move forward slightly before turning
+        self.turning_prep_time = 0.55 # time required to move forward slightly before turning
         self._speed = 100
         
         #Line following params
@@ -321,19 +321,27 @@ class Robot():
         # servo twisting 
         self.servo1.set_angle(15)
 
-        cct_hist = deque([0]*50, 50)
+        cct_hist = deque([0]*10, 10)
+        y_hist = deque([0]*10, 10)
         temp_i = 0
-        while temp_i < 100:
+        while temp_i < 10:
             cct, y = self.tcs.read()
             if cct is not None:
                 cct_hist.append(int(cct))
+                y_hist.append(y)
             else: # just so it goes to a depot.. doesn't matter which one
                 self.current_target = 'DP1' 
                 raise ValueError('Colour not detected')
             temp_i += 1
 
         cct_avg = self._get_moving_avg(cct_hist)
+        y_avg = self._get_moving_avg(y_hist)
+
         self.current_target = 'DP1' if cct_avg < 6000 else 'DP2'
+        
+        if y_avg < -0.6:
+            self.current_target = 'DP2'
+        
         
         # update state
         route = dijkstra(self.current_node, self.current_target)

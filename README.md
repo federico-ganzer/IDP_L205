@@ -14,3 +14,10 @@ This repository is for the Integrated Design Project (IDP) belonging to Team 205
 - Tom - Mechanical
 - Djaafar - Mechanical
 - Federico - Software
+
+```mermaid
+  graph TD
+  A --> B;
+  A --> C;
+  B --> D;
+  C --> D;

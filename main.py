@@ -54,7 +54,7 @@ def main():
         if agv.current_node == 'START' and agv.current_target == 'START':
             agv.motorL.forward(50)
             agv.motorR.forward(50)
-            sleep(2)
+            sleep(2.5)
             agv.motorL.stop()
             agv.motorR.stop()
             break

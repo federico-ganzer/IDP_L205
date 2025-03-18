@@ -30,7 +30,7 @@ class Robot():
         self.turning_prep_time = 0.55 # time required to move forward slightly before turning
         self._speed = 100
         
-        #Line following params
+        #Line following params [PID control]
         
         self._window_size = 5
         self.left_sensor_hist = deque([0]*self._window_size, self._window_size)
@@ -39,7 +39,7 @@ class Robot():
         self.right_outer_sensor_hist = deque([0]*self._window_size, self._window_size)
         self._prev_err = 0
         self._integral = 0
-        self.kp = 40
+        self.kp = 40 # These are the correct values
         self.ki = 0.03
         self.kd = 3
         
@@ -215,6 +215,9 @@ class Robot():
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
         elif decision == 0: # straight
+            # BUG: Perhaps we need to do line following in this case
+            self.motorR.forward(80);
+            self.motorL.forward(80);
             sleep(self.turning_prep_time) # just so it doesn't detect multiple straight junctions in one whilst going straight
             
     def spin(self, speed, direction):
@@ -276,8 +279,8 @@ class Robot():
         '''
         time_for_reverse = {
             "A": 1.3,
-            "B": 0.9,
-            "C": 1.1,
+            "B": 0.92,
+            "C": 1.2,
             "D": 0.9,
             "DP1": 2,
             "DP2": 2

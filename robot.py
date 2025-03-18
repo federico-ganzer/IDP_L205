@@ -1,5 +1,6 @@
 from machine import Pin
 from time import sleep
+import time
 from sensors.tcs34725 import TCS34725
 from pathfinder import dijkstra, convert_coord_to_node
 from motors import Motor, Servo
@@ -214,8 +215,14 @@ class Robot():
             # update state once turn is complete
             if self.next_direction is not None:
                 self.current_direction = self.next_direction
+        
         elif decision == 0: # straight
-            sleep(self.turning_prep_time) # just so it doesn't detect multiple straight junctions in one whilst going straight
+            start_ticks = time.ticks_ms()
+            while time.ticks_diff(time.ticks_ms(), start_ticks) < self.turning_prep_time * 1000:
+                self.follow_line()
+            
+            
+            #sleep(self.turning_prep_time) # just so it doesn't detect multiple straight junctions in one whilst going straight
             
     def spin(self, speed, direction):
         '''

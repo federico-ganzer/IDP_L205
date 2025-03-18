@@ -31,7 +31,7 @@ class Robot():
         self.turning_prep_time = 0.55 # time required to move forward slightly before turning
         self._speed = 100
         
-        #Line following params
+        #Line following params [PID control]
         
         self._window_size = 5
         self.left_sensor_hist = deque([0]*self._window_size, self._window_size)
@@ -40,7 +40,7 @@ class Robot():
         self.right_outer_sensor_hist = deque([0]*self._window_size, self._window_size)
         self._prev_err = 0
         self._integral = 0
-        self.kp = 40
+        self.kp = 40 # These are the correct values
         self.ki = 0.03
         self.kd = 3
         
@@ -283,8 +283,8 @@ class Robot():
         '''
         time_for_reverse = {
             "A": 1.3,
-            "B": 0.9,
-            "C": 1.1,
+            "B": 0.92,
+            "C": 1.2,
             "D": 0.9,
             "DP1": 2,
             "DP2": 2

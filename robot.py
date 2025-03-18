@@ -337,7 +337,6 @@ class Robot():
                 self.current_target = 'DP1' 
                 raise ValueError('Colour not detected')
             temp_i += 1
-
         cct_avg = self._get_moving_avg(cct_hist)
         y_avg = self._get_moving_avg(y_hist)
 
@@ -345,6 +344,38 @@ class Robot():
         
         if y_avg < -0.6:
             self.current_target = 'DP2'
+        
+        '''
+        or USING RGB INSTEAD
+        
+        rgb_hist = deque([0]*10, 10)
+        temp_i = 0
+        while temp_i < 10:
+            r, g, b, c = self.tcs.read(raw=True)
+            if r is not None and g is not None and b is not None:
+                rgb_hist.append((r, g, b))
+            else: # just so it goes to a depot.. doesn't matter which one
+                self.current_target = 'DP1' 
+                raise ValueError('Colour not detected')
+            temp_i += 1
+
+        avg_r = sum([rgb[0] for rgb in rgb_hist]) / len(rgb_hist)
+        avg_g = sum([rgb[1] for rgb in rgb_hist]) / len(rgb_hist)
+        avg_b = sum([rgb[2] for rgb in rgb_hist]) / len(rgb_hist)
+
+        if avg_r > avg_g and avg_r > avg_b:
+            self.current_target = 'DP1'  # Red 
+        elif avg_g > avg_r and avg_g > avg_b:
+            self.current_target = 'DP2'  # Green 
+        elif avg_b > avg_r and avg_b > avg_g:
+            self.current_target = 'DP2'  # Blue 
+        elif avg_r > avg_b and avg_g > avg_b:
+            self.current_target = 'DP1'  # Yellow 
+        else:
+            self.current_target = 'DP1'  # Default to DP1 if color is not clear
+        
+        '''
+        
         
         
         # update state

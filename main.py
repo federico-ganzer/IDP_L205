@@ -45,6 +45,7 @@ def main():
             agv.current_route = min_path
             
         if agv.current_node in set(['DP1', 'DP2']) and agv.visited_customers == customers and not agv.block:
+            
             agv.current_target = 'START'
             route = dijkstra(agv.current_node, 'START')
             if route is not None:
@@ -68,6 +69,5 @@ if __name__ == "__main__":
     
 '''
 TODO: 
-- Fix LED
 - Reduce sleep time at customers
 '''

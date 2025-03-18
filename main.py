@@ -45,7 +45,6 @@ def main():
             agv.current_route = min_path
             
         if agv.current_node in set(['DP1', 'DP2']) and agv.visited_customers == customers and not agv.block:
-            
             agv.current_target = 'START'
             route = dijkstra(agv.current_node, 'START')
             if route is not None:
@@ -55,7 +54,7 @@ def main():
         if agv.current_node == 'START' and agv.current_target == 'START':
             agv.motorL.forward(50)
             agv.motorR.forward(50)
-            sleep(2.5)
+            sleep(2.4)
             agv.motorL.stop()
             agv.motorR.stop()
             break

@@ -19,7 +19,7 @@ customers = set(['A', 'B', 'C', 'D'])
 
 def main():
     agv.servo1.zero() # set servo to zero 
-    
+    i=0
     while True:
         
         agv.forward(100)
@@ -45,8 +45,15 @@ def main():
             agv.current_route = min_path
             
         if agv.current_node in set(['DP1', 'DP2']) and agv.visited_customers == customers and not agv.block:
-            agv.current_target = 'START'
-            route = dijkstra(agv.current_node, 'START')
+            
+            if i > 0:
+                agv.current_target = 'START'
+                route = dijkstra(agv.current_node, 'START')
+            else:
+                agv.visited_customers = set()
+                agv.current_target = 'A'
+                route = dijkstra(agv.current_node, 'A')
+                i = 1
             if route is not None:
                 agv.current_route = route[0]
         
@@ -54,7 +61,7 @@ def main():
         if agv.current_node == 'START' and agv.current_target == 'START':
             agv.motorL.forward(50)
             agv.motorR.forward(50)
-            sleep(2.5)
+            sleep(2.4)
             agv.motorL.stop()
             agv.motorR.stop()
             break

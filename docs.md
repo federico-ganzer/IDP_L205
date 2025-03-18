@@ -17,6 +17,38 @@ The general approach of the software structure was to create an AGV class (`Robo
 </div>
 The main loop (in `main.py`) starts by initialising the robot with the current target of `A`. Once the robot navigates to its target, it enters the pickup routine and initializes a new route based on the colour of the package it picked up. The route is then navigated, the block is dropped and a new route is initialized to the closest non-visited customer. The process is repeated until all customers have been visited. The robot then returns to the start box.
 
+```mermaid
+flowchart TD
+    Start([Start]) --> Initialize[Initialize Robot with pins and targets]
+    Initialize --> SetServo[Set servo to zero]
+    SetServo --> |Move Forward| MoveForward[Move forward at speed 100]
+
+    MoveForward --> |Check Current Node| CheckNode{Is current node in customers?}
+    CheckNode --> |Yes| Pickup[Perform pickup operation]
+    CheckNode --> |No| CheckDepot{Is current node in depots?}
+
+    Pickup --> |Continue| MoveForward
+
+    CheckDepot --> |Yes| Drop[Perform drop operation]
+    CheckDepot --> |No| MoveForward
+
+    Drop --> |Find Closest Customer| FindClosest[Find closest unvisited customer]
+    FindClosest --> |Update Target and Route| UpdateTarget[Set current_target and current_route]
+    UpdateTarget --> |Continue| MoveForward
+
+    Drop --> |Check if All Customers Visited| CheckAllVisited{Are all customers visited?}
+    CheckAllVisited --> |Yes| ReturnToStart[Set target to START and plan route]
+    CheckAllVisited --> |NO| FindClosest
+    ReturnToStart --> |Continue| MoveForward
+
+    MoveForward --> |Check if at START| CheckStart{Is current node START and target START?}
+    CheckStart --> |Yes| Stop[Stop motors and end program]
+    CheckStart --> |No| MoveForward
+
+    Stop --> End([End])
+```
+
+
 ## Modules
 - [robot.py](#robot.py)
 - [pathfinder.py](#pathfinder.py)

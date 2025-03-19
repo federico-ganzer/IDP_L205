@@ -8,14 +8,21 @@ class Motor():
         self.dir.value(0) # set direction to forward
         self.pwm.freq(1000) # set max frequency
         self.pwm.duty_u16(0) # set duty cycle
+        self.speed = 0
 
     def forward(self, speed):
-        self.dir.value(0)
-        self.pwm.duty_u16(int(65535*speed/100))
+        if speed == self.speed:
+            self.dir.value(0)
+        else:
+            self.dir.value(0)
+            self.pwm.duty_u16(int(65535*speed/100))
 
     def reverse(self, speed):
-        self.dir.value(1)
-        self.pwm.duty_u16(int(65535*speed/100))
+        if speed == self.speed:
+            self.dir.value(1)
+        else:
+            self.dir.value(1)
+            self.pwm.duty_u16(int(65535*speed/100))
 
     def stop(self):
         self.pwm.duty_u16(0)

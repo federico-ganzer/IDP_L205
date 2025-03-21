@@ -17,12 +17,14 @@ The general approach of the software structure was to create an AGV class (`Robo
 </div>
 
 For our use, the `Robot()` pins are set as follows (these can be changed in the pins dict passed to `Robot()` when initializing):
-`pins = {'outer_sensorL_pin' : 18, 'outer_sensorR_pin' : 19,
+```
+pins = {'outer_sensorL_pin' : 18, 'outer_sensorR_pin' : 19,
         'line_sensorR_pin' : 20, 'line_sensorL_pin' : 21,
         'motorR_pwm_pin' : 4, 'motorR_dir_pin' : 5, # Motor Pins are Hard Coded in Robot()
         'motorL_pwm_pin' : 6, 'motorL_dir_pin' : 7, # Motor Pins are Hard Coded in Robot()
         'servo_pin1' : 13, 'servo_pin2' : 15,
-        'led_pin' : 22, 'button_pin': 12 }`
+        'led_pin' : 22, 'button_pin': 12 }
+```
 
 
 The main loop (in `main.py`) starts by initialising the robot with the current target of `A`. Once the robot navigates to its target, it enters the pickup routine and initializes a new route based on the colour of the package it picked up. The route is then navigated, the block is dropped and a new route is initialized to the closest non-visited customer. The process is repeated until all customers have been visited. The robot then returns to the start box.

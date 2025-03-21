@@ -9,7 +9,7 @@
 1. [Structure and Algorithms](#Structureandapplication)
 2. [Modules](#modules)
 
-## Structure and Application
+## Structure and Algorithms
 The general approach of the software structure was to create an AGV class (`Robot()`) that could be used to access motor control, sensor readings, and storing of current state variables associated to what the robot's current task is. The AGV class would respond to changes in its current route and move from node to node accordingly. The `current_node` state variable is updated to the next node in the current route whenever a junction is detected. At each detected junction a decision function is called to determine whether the robot should turn, and the `current_direction` variable is adjusted accordingly.
 <div align="center">
   <img src="graph.png" alt="Graph" width="400">

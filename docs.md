@@ -21,7 +21,7 @@ The main loop (in `main.py`) starts by initialising the robot with the current t
 flowchart TD
     Start([Start]) --> Initialize[Initialize Robot with pins and targets]
     Initialize --> SetServo[Set servo to zero]
-    SetServo --> |Move Forward| MoveForward[Move forward at speed 100 along `current_route`]
+    SetServo --> |Move Forward| MoveForward[Move forward at speed 100 along current_route]
 
     MoveForward --> |Check Current Node| CheckNode{Is current node in customers?}
     CheckNode --> |Yes| Pickup[Perform pickup operation]

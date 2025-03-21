@@ -47,7 +47,9 @@ flowchart TD
 
     Stop --> End([End])
 ```
-
+<div align="center">
+<p><em>Figure 2: Diagram of main loop</em></p>
+</div>div>
 
 ## Modules
 - [robot.py](#robot.py)

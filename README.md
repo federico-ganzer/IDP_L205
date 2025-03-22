@@ -3,8 +3,8 @@ This repository is for the Integrated Design Project (IDP) belonging to Team 205
 
 ## Documentation:
 - **Software:** ['docs.md'](docs.md)
-- **Electrical:** ['IDP___Electrical_Documentation.pdf'](IDP___Electrical_Documentation.pdf) (DRAFT)
-- **Mechanical:**
+- **Electrical:** ['IDP___Electrical_Documentation.pdf'](IDP___Electrical_Documentation.pdf) 
+- **Mechanical:**['docs.md']([a link](https://github.com/federico-ganzer/IDP_L205/))
 
 ## Our Team:
 - Somanshu - Software
